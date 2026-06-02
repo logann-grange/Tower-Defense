@@ -5,7 +5,7 @@ Skeleton::Skeleton()
     : m_texture(), m_sprite(m_texture)
 {
     maxHealth = health = 50;
-    speed = 1.0f;
+    speed = 10.0f;
     damage = 5;
     reward = 10;
     x = 0;

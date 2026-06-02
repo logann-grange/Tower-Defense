@@ -3,11 +3,9 @@
 #include "nlohmann/json.hpp"
 #include "Map.hpp"
 
-using json =nlohmann::json;
+using json = nlohmann::json;
 
-// (Note : Les lignes "const int Map::VAL_..." ont été supprimées d'ici)
-
-Map::Map() : m_width(0), m_height(0) {
+Map::Map() : m_width(0), m_height(0), m_gridSize(16), m_pointDepart(0, 5) {
 }
 
 bool Map::loadFromFile(const std::string& ldtkFilename) {
@@ -23,13 +21,12 @@ bool Map::loadFromFile(const std::string& ldtkFilename) {
     // Récupération du premier niveau
     auto& level = ldtk_data["levels"][0];
     
-    std::vector<int> flat_grid;
     m_layerTiles.clear();
 
-    // 3. On parcourt tous les calques pour tout charger d'un coup
+    // On parcourt tous les calques pour tout charger d'un coup
     for (auto& layer : level["layerInstances"]) {
         
-        // A. S'il s'agit du calque de LOGIQUE (IntGrid)
+        // A. Calque de LOGIQUE (IntGrid)
         if (layer["__identifier"] == "IntGrid") {
             m_width = layer["__cWid"].get<int>();
             m_height = layer["__cHei"].get<int>();
@@ -43,7 +40,20 @@ bool Map::loadFromFile(const std::string& ldtkFilename) {
             }
         }
         
-        // B. S'il s'agit d'un calque VISUEL avec vos assets (Tiles ou AutoLayer)
+        // B. Calque d'ENTITÉS (Recherche du Spawn)
+        if (layer["__type"] == "Entities") {
+            for (auto& entity : layer["entityInstances"]) {
+                // Correspond à l'identifiant "Monster_spawn" présent dans ton fichier .ldtk
+                if (entity["__identifier"] == "Monster_spawn") {
+                    m_pointDepart.x = entity["__grid"][0].get<int>();
+                    m_pointDepart.y = entity["__grid"][1].get<int>();
+                    std::cout << "SUCCESS : Entite Monster_spawn trouvee en case : (" 
+                              << m_pointDepart.x << ", " << m_pointDepart.y << ")\n";
+                }
+            }
+        }
+        
+        // C. Calques VISUELS (Tiles ou AutoLayer)
         if ((layer["__type"] == "Tiles" || layer["__type"] == "AutoLayer") && !layer["gridTiles"].empty()) {
             m_gridSize = layer["__gridSize"].get<int>();
 
@@ -62,8 +72,6 @@ bool Map::loadFromFile(const std::string& ldtkFilename) {
             }
 
             sf::Texture* texturePointeur = &m_textures[texturePath];
-
-            // On crée un nouveau calque temporaire pour y mettre les tuiles de ce calque précisément
             std::vector<TileInfo> currentLayerTiles;
 
             for (auto& tile : layer["gridTiles"]) {
@@ -76,20 +84,18 @@ bool Map::loadFromFile(const std::string& ldtkFilename) {
                 currentLayerTiles.push_back(info);
             }
 
-            // On ajoute ce calque à notre liste de calques
             m_layerTiles.push_back(currentLayerTiles);
         }
     }
     return true;
 }
 
+sf::Vector2i Map::trouverPointDepartDepuisEntite() const {
+    return m_pointDepart;
+}
+
 void Map::draw(sf::RenderWindow& window) {
-    // LDtk enregistre les calques du HAUT vers le BAS dans le JSON.
-    // Pour l'affichage, on doit faire l'INVERSE : dessiner du BAS (le sol) vers le HAUT (les arbres).
-    // On parcourt donc notre tableau m_layerTiles à l'envers (du dernier élément au premier).
     for (int i = static_cast<int>(m_layerTiles.size()) - 1; i >= 0; --i) {
-        
-        // On dessine toutes les tuiles du calque courant 'i'
         for (const auto& tile : m_layerTiles[i]) {
             if (tile.texture != nullptr) {
                 sf::Sprite sprite(*tile.texture); 
@@ -109,17 +115,16 @@ void Map::draw(sf::RenderWindow& window) {
         }
     }
 }
+
 bool Map::isMonsterPath(int x, int y) const {
     if (x >= 0 && x < m_width && y >= 0 && y < m_height) {
-        // Correction ici : on utilise le nom déclaré dans le .hpp
-        return m_grid[y][x] == VAL_CHEMIN; 
+        return m_grid[y][x] == VAL_CHEMIN; // VAL_CHEMIN vaut 2 (zone_de_chemin)
     }
     return false;
 }
 
 bool Map::isTowerZone(int x, int y) const {
     if (x >= 0 && x < m_width && y >= 0 && y < m_height) {
-        // Correction ici : on utilise le nom déclaré dans le .hpp
         return m_grid[y][x] == VAL_TOURS;
     }
     return false;
@@ -130,19 +135,20 @@ std::vector<sf::Vector2i> Map::genererChemin(sf::Vector2i pointDepart) {
     sf::Vector2i caseActuelle = pointDepart;
     chemin.push_back(caseActuelle);
 
-    // Liste des 4 directions autour d'une case (Droite, Gauche, Bas, Haut)
     std::vector<sf::Vector2i> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     
     bool cheminEnCours = true;
-    while (cheminEnCours) {
+    int indexSecurite = 0; 
+
+    while (cheminEnCours && indexSecurite < 1000) {
+        indexSecurite++;
         bool caseTrouvee = false;
 
         for (const auto& dir : directions) {
             sf::Vector2i voisine = caseActuelle + dir;
 
-            // On vérifie si la case voisine est un chemin
             if (isMonsterPath(voisine.x, voisine.y)) {
-                // Pour ne pas faire demi-tour, on vérifie si elle n'est pas déjà dans notre chemin
+                // Permet d'avancer vers la suite même si la case actuelle est le spawn d'entité
                 if (chemin.size() < 2 || voisine != chemin[chemin.size() - 2]) {
                     caseActuelle = voisine;
                     chemin.push_back(caseActuelle);
@@ -152,7 +158,6 @@ std::vector<sf::Vector2i> Map::genererChemin(sf::Vector2i pointDepart) {
             }
         }
 
-        // Si aucune case "chemin" non visitée n'est autour, la route est finie (base atteinte)
         if (!caseTrouvee) {
             cheminEnCours = false;
         }
@@ -160,7 +165,5 @@ std::vector<sf::Vector2i> Map::genererChemin(sf::Vector2i pointDepart) {
 
     return chemin;
 }
-
-
 int Map::getWidth() const { return m_width; }
 int Map::getHeight() const { return m_height; }
