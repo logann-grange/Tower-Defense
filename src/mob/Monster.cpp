@@ -1,25 +1,59 @@
-// Implementation file for Monster
-// Monster is an abstract base class; its pure virtual methods
-// are implemented by derived classes (e.g., Skeleton).
-
 #include "Monster.hpp"
 
-void Monster::takeDamage(int amount) {
-	health -= amount;
-	if (health < 0) health = 0;
+void Monster::spawn(const std::vector<sf::Vector2i>& chemin) {
+    m_pointsCheminPixels.clear();
+    for (const auto& caseGrille : chemin) {
+        m_pointsCheminPixels.push_back({ static_cast<float>(caseGrille.x * 16), static_cast<float>(caseGrille.y * 16) });
+    }
+
+    if (!m_pointsCheminPixels.empty()) {
+        m_position = m_pointsCheminPixels[0];
+        m_indexEtape = 1;
+        m_arrive = false;
+    }
 }
 
-bool Monster::isDead() const {
-	return health <= 0;
+void Monster::move(float deltaTime) {
+    if (m_arrive || m_indexEtape >= m_pointsCheminPixels.size()) {
+        m_arrive = true;
+        return;
+    }
+
+    sf::Vector2f cible = m_pointsCheminPixels[m_indexEtape];
+    sf::Vector2f direction = cible - m_position;
+
+    if (direction.x < 0.f) {
+        m_directionCourante = Direction::Gauche;
+    } else if (direction.x > 0.f) {
+        m_directionCourante = Direction::Droite;
+    }
+
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    float distanceAParcourir = m_speed * deltaTime;
+
+    if (distanceAParcourir >= distance) {
+        m_position = cible;
+        m_indexEtape++;
+    } else {
+        m_position += (direction / distance) * distanceAParcourir;
+    }
 }
 
-void Monster::setPosition(int nx, int ny) {
-	x = nx;
-	y = ny;
-}
+void Monster::subirDegats(float montant, const std::string& typeDegat) {
+    if (estMort()) return;
 
-void Monster::heal(int amount) {
-	health += amount;
-	if (health > maxHealth) health = maxHealth;
-}
+    float degatsFinaux = montant;
 
+    // Si la tour utilise un type de dégât auquel le monstre est sensible
+    if (typeDegat == m_faiblesse) {
+        degatsFinaux = montant * 2.f; // Double dégâts !
+        std::cout << "Coup critique ! Faiblesse touchee !" << std::endl;
+    }
+
+    m_pvActuels -= degatsFinaux;
+
+    if (m_pvActuels <= 0.f) {
+        m_pvActuels = 0.f;
+        std::cout << "Le monstre est mort ! Gain de " << m_orRecompense << " or." << std::endl;
+    }
+}

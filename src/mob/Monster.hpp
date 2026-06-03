@@ -1,67 +1,48 @@
 #ifndef MONSTER_HPP
 #define MONSTER_HPP
 
-
-#include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <vector>
+#include <cmath>
+#include <string>
 #include <iostream>
 
-class Monster{
-    public:
-        Monster() : health(0), maxHealth(0), speed(0.0f), damage(0), reward(0), x(0), y(0) {}
-        virtual ~Monster() = default;
-        int getHealth() const {
-            return health;
-        }
+class Monster {
+public:
+    virtual ~Monster() = default;
 
-        float getSpeed() const {
-            return speed;
-        }
+    enum class Direction { Droite, Gauche };
 
-        int getDamage() const {
-            return damage;
-        }
+    void spawn(const std::vector<sf::Vector2i>& chemin);
+    void move(float deltaTime);
 
-        int getReward() const {
-            return reward;
-        }
+    void subirDegats(float montant, const std::string& typeDegat);
 
-        int getX() const {
-            return x;
-        }
-        int getY() const {
-            return y;
-        }
+    bool estMort() const { return m_pvActuels <= 0.f; }
+    float getPvActuels() const { return m_pvActuels; }
+    float getPvMax() const { return m_pvMax; }
+    int getDegatsBase() const { return m_degatsBase; }
+    int getOrRecompense() const { return m_orRecompense; }
+    std::string getFaiblesse() const { return m_faiblesse; }
 
-        void takeDamage(int amount);
+    sf::Vector2f getPosition() const { return m_position; }
+    bool estArrive() const { return m_arrive; }
+    Direction getDirection() const { return m_directionCourante; }
 
-        bool isDead() const;
+protected:
+    sf::Vector2f m_position;
+    float m_speed = 0.f; // Sera modifié par le constructeur du Skeleton ou Goblin
 
-        void setPosition(int nx, int ny);
-
-        void heal(int amount);
-
-        virtual void move(float deltaTime) = 0;
-
-        virtual void mourir() = 0;
-
-        virtual void attaquer() = 0;
-        
-        void spawn(const std::vector<sf::Vector2i>& cheminPoints);
-
-    protected:
-        int health;
-        int maxHealth;
-        float speed;
-        int damage;
-        int reward;
-        int x;
-        int y;
-        int dmg;
-        std::string faiblesse; 
-        std::string lienSprit;
+    float m_pvMax = 100.f;
+    float m_pvActuels = 100.f;
+    int m_degatsBase = 1;         // Le nombre de coeurs/points que le joueur perd si ce monstre arrive au bout
+    int m_orRecompense = 0;       // L'or donné au joueur à sa mort
+    std::string m_faiblesse = ""; // Exemple: "Feu", "Fleche", "Magie"...
+    
+    std::vector<sf::Vector2f> m_pointsCheminPixels;
+    size_t m_indexEtape = 0;
+    bool m_arrive = false;
+    Direction m_directionCourante = Direction::Droite;
 };
 
-
-
-
-#endif // MONSTER_HPP
+#endif

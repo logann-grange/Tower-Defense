@@ -1,31 +1,28 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Map.hpp"
-#include "mob/Skeleton.hpp"
+#include "Map/Map.hpp"
+#include "mob/logic/Skeleton.hpp"
+#include "mob/view/SkeletonView.hpp" // <-- On inclut le fichier graphique
 
 int main() {
-    // CORRECTION SFML 3 : VideoMode prend maintenant un sf::Vector2u pour la taille !
-    sf::RenderWindow window(sf::VideoMode({1280, 992}), "Tower Defence - Vagues de Squelettes");
+    sf::RenderWindow window(sf::VideoMode({1032, 792}), "Tower Defence - Propre !");
 
     Map mon_niveau;
     if (!mon_niveau.loadFromFile("Map/map_tower_defence.ldtk")) {
         return -1;
     }
 
-    // CORRECTION SFML 3 : FloatRect prend désormais ({position_x, position_y}, {largeur, hauteur})
-    sf::View vueJeu(sf::FloatRect({0.f, 0.f}, {640.f, 496.f}));
+    sf::View vueJeu(sf::FloatRect({0.f, 0.f}, {688.f, 528.f}));
     window.setView(vueJeu);
 
-    // 1. GENERER LE CHEMIN AUTOMATIQUEMENT VIA L'ENTITÉ
     sf::Vector2i caseDepart = mon_niveau.trouverPointDepartDepuisEntite(); 
-    std::cout << "DEBUG LOG: Position depart : (" << caseDepart.x << ", " << caseDepart.y << ")\n";
-
     std::vector<sf::Vector2i> cheminMonstres = mon_niveau.genererChemin(caseDepart);
-    std::cout << "DEBUG LOG: Taille du chemin genere = " << cheminMonstres.size() << " cases." << std::endl;
 
-    // 2. CREER LE SQUELETTE
-    Skeleton monSquelette;
-    monSquelette.spawn(cheminMonstres); 
+    // --- INSTANCIATION SÉPARÉE ---
+    Skeleton squeletteLogique;              // La logique pure
+    SkeletonView squeletteGraphique;        // Le visuel pur
+    
+    squeletteLogique.spawn(cheminMonstres); // On lance la logique au départ
 
     sf::Clock clock;
 
@@ -37,13 +34,17 @@ int main() {
         }
 
         // --- MISE À JOUR LOGIQUE ---
-        monSquelette.move(deltaTime); 
+        squeletteLogique.move(deltaTime); 
+
+        // --- MISE À JOUR GRAPHIQUE ---
+        // La vue a besoin du deltaTime pour son animation, et de la logique pour copier sa position
+        squeletteGraphique.update(deltaTime, squeletteLogique); 
 
         // --- AFFICHAGE ---
         window.clear();
         
         mon_niveau.draw(window); 
-        monSquelette.draw(window); 
+        squeletteGraphique.draw(window); // On dessine l'objet graphique
 
         window.display();
     }
