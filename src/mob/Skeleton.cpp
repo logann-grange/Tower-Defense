@@ -5,25 +5,30 @@ Skeleton::Skeleton()
     : m_texture(), m_sprite(m_texture)
 {
     maxHealth = health = 50;
-    speed = 10.0f;
+    speed = 30.0f;
     damage = 5;
     reward = 10;
     x = 0;
     y = 0;
     dmg = 5;
     faiblesse = "Fire";
-    lienSprit = "assets/Skeleton_Crew/Skeleton - Base/Run/Run-Sheet.png";
+    lienSprit = "asset/Skeleton_Crew/Skeleton-Base/Run/Run2.png";
     m_indexEtapeActuelle = 0;
 
-    if (!m_texture.loadFromFile(lienSprit)) {
-        std::cerr << "Erreur : Impossible de charger le sprite du squelette\n";
+
+if (!m_texture.loadFromFile(lienSprit)) { // Mets le bon chemin vers ton PNG
+        std::cerr << "Erreur : Impossible de charger " << lienSprit << std::endl;
     }
     m_sprite.setTexture(m_texture);
-    
-    // Si votre Run-Sheet contient plusieurs images alignées (spritesheet),
-    // on découpe le premier squelette pour l'instant (ex: un carré de 32x32 ou 16x16)
-    m_sprite.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
+
+    // 2. Découper uniquement le premier carré (Frame 0)
+    // sf::IntRect({position_x, position_y}, {largeur, hauteur})
+    m_sprite.setTextureRect(sf::IntRect({0, 0}, {m_frameLargeur, m_frameHauteur}));
+
+    // 3. Optionnel : Centrer l'origine du sprite pour qu'il soit bien aligné sur tes cases
+    m_sprite.setOrigin({static_cast<float>(m_frameLargeur) / 2.f,52.f});
 }
+
 
 void Skeleton::spawn(const std::vector<sf::Vector2i>& cheminPoints) {
     if (cheminPoints.empty()) return;
@@ -68,6 +73,29 @@ void Skeleton::move(float deltaTime) {
 
     // Appliquer la nouvelle position au sprite SFML
     m_sprite.setPosition(m_positionPixels);
+
+    // --- 2. GESTION DE L'ANIMATION ---
+    m_tempsAnimation += deltaTime;
+
+    if (m_tempsAnimation >= m_vitesseAnimation) {
+        m_tempsAnimation = 0.f; // On réinitialise le compteur de temps
+        m_frameActuelle++;      // On passe à l'image suivante
+
+        // Si on dépasse la 8ème image, on revient au tout début en boucle
+        if (m_frameActuelle >= m_nbFramesMax) {
+            m_frameActuelle = 0;
+        }
+
+        // CALCUL DE LA ZONE À DÉCOUPER
+        // La position X de la découpe se décale de 64 pixels à chaque frame (0, 64, 128, 192...)
+        int positionXDecoupe = m_frameActuelle * m_frameLargeur;
+
+        // On applique le nouveau rectangle de découpe SFML 3
+        m_sprite.setTextureRect(sf::IntRect(
+            {positionXDecoupe, 0}, 
+            {m_frameLargeur, m_frameHauteur}
+        ));
+}
 }
 
 void Skeleton::draw(sf::RenderWindow& window) {

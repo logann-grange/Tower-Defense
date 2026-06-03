@@ -27,6 +27,14 @@ private:
     int dmg;
     std::string faiblesse;
 
+    int m_frameLargeur = 64;  // À changer en 32 si ton sprite fait 32x32 !
+    int m_frameHauteur = 64;  // À changer en 32 si ton sprite fait 32x32 !
+    int m_nbFramesMax = 6;     // Ton image contient 8 squelettes horizontaux
+    int m_frameActuelle = 0;   // L'index de l'image en cours (0 à 7)
+    
+    float m_tempsAnimation = 0.f; 
+    float m_vitesseAnimation = 0.1f;
+
 };
 
 #endif // SKELETON_HPP
