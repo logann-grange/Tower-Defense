@@ -32,6 +32,7 @@ private:
     // Variables de découpe pour tes images en 384x64 (6 frames de 64x64)
     int m_frameLargeur = 64;
     int m_frameHauteur = 64;
+    int mframeHauteurMort = 48; // ← adapte à la nouvelle hauteur de frame
     int m_nbFramesMax = 6;
     int m_frameActuelle = 0;
     

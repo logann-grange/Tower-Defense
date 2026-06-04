@@ -2,11 +2,15 @@
 
 // SFML 3 : On lie obligatoirement m_sprite à m_textureDroite dès le départ
 SkeletonWarriorView::SkeletonWarriorView() : m_sprite(m_textureDroite) {
+    std::cout << "=== SkeletonWarriorView constructeur ===" << std::endl; 
     
     // 1. Chargement des textures  C:\Users\bilal\OneDrive\Documents\Projet_tower_defence\asset\Skeleton_Crew\Skeleton-Warrior\Run
     if (!m_textureDroite.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png")) {
         std::cerr << "Erreur : Impossible de charger Run-Sheet.png" << std::endl;
     }
+
+    m_sprite.setTexture(m_textureDroite);
+    m_sprite.setTextureRect(sf::IntRect({0, 0}, {m_frameLargeur, m_frameHauteur}));
     if (!m_textureGauche.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG_Reverse.png")) {
         std::cerr << "Erreur : Impossible de charger Run_Reverse.png" << std::endl;
     }
@@ -15,11 +19,12 @@ SkeletonWarriorView::SkeletonWarriorView() : m_sprite(m_textureDroite) {
         std::cerr << "Erreur : Impossible de charger Death-Sheet.png" << std::endl;
     }
 
+
     // 2. Découpe initiale de la première case (0, 0)
     m_sprite.setTextureRect(sf::IntRect({0, 0}, {m_frameLargeur, m_frameHauteur}));
     
-    // 3. On décale le pivot vertical (52.f) pour remonter le corps du squelette sur les pavés
-    m_sprite.setOrigin({ static_cast<float>(m_frameLargeur) / 2.f, 52.f });
+    // 3. On décale le pivot vertical (63.f) pour remonter le corps du squelette sur les pavés
+    m_sprite.setOrigin({ static_cast<float>(m_frameLargeur) / 2.f, 63.f });
 
     m_barreFond.setSize({40.f, 5.f});
     m_barreFond.setFillColor(sf::Color::Red);
@@ -36,6 +41,13 @@ void SkeletonWarriorView::update(float deltaTime, const Monster& logique) {
     if (m_animationMortTermine) return;
 
     m_sprite.setPosition(logique.getPosition());
+    static int frameCount = 0;
+    if (frameCount++ % 60 == 0) {
+        auto rect = m_sprite.getTextureRect();
+        std::cout << "rect=(" << rect.position.x << "," << rect.position.y 
+                  << ") size=(" << rect.size.x << "," << rect.size.y << ")"
+                  << " frame=" << m_frameActuelle << std::endl;
+    }
 
     if (logique.estMort()) {
         // --- 1. CODE DE MORT SÉCURISÉ PAR TABLEAU ---
@@ -44,20 +56,18 @@ void SkeletonWarriorView::update(float deltaTime, const Monster& logique) {
         // Si ton image fait 576 pixels de large avec 8 squelettes, chaque case fait EXACTEMENT 72 pixels de large !
         // (72 * 8 = 576). C'est pour ça que le calcul avec 64 pixels décalait tout et clignotait !
         static const sf::IntRect rectanglesMort[] = {
-    sf::IntRect({0,   0}, {96, 64}),
-    sf::IntRect({96,  0}, {96, 64}),
-    sf::IntRect({192, 0}, {96, 64}),
-    sf::IntRect({288, 0}, {96, 64}),
-    sf::IntRect({384, 0}, {96, 64}),
-    sf::IntRect({480, 0}, {96, 64}),
-    sf::IntRect({576, 0}, {96, 64}),
-    sf::IntRect({672, 0}, {96, 64})
+    sf::IntRect({0,   0}, {64, 48}),
+    sf::IntRect({64,  0}, {64, 48}),
+    sf::IntRect({128, 0}, {64, 48}),
+    sf::IntRect({192, 0}, {64, 48}),
+    sf::IntRect({256, 0}, {64, 48}),
+    sf::IntRect({320, 0}, {64, 48})
 };
 
         // Sécurité : Premier instant de la mort, on initialise
         if (&m_sprite.getTexture() != &m_textureMort) {
         m_sprite.setTexture(m_textureMort);
-        m_sprite.setOrigin({ 96.f / 2.f, 52.f }); // ← adapte l'origine à la nouvelle largeur de frame
+        m_sprite.setOrigin({ 64.f / 2.f, 47.f }); // ← adapte l'origine à la nouvelle largeur de frame
         m_frameActuelle = 0;
         m_tempsAnimation = 0.f;
         m_sprite.setTextureRect(rectanglesMort[0]);
@@ -73,8 +83,8 @@ void SkeletonWarriorView::update(float deltaTime, const Monster& logique) {
         if (m_tempsAnimation >= 0.15f) { 
             m_tempsAnimation = 0.f;
             
-            // On avance dans notre tableau de 8 images (index 0 à 7)
-            if (m_frameActuelle < 7) { 
+            // On avance dans notre tableau de 6 images (index 0 à 5)
+            if (m_frameActuelle < 5) { 
                 m_frameActuelle++;
                 // On applique le rectangle exact sans faire de calcul mathématique multiplicateur
                 m_sprite.setTextureRect(rectanglesMort[m_frameActuelle]);
@@ -100,7 +110,13 @@ void SkeletonWarriorView::update(float deltaTime, const Monster& logique) {
     } else {
         m_sprite.setTexture(m_textureDroite);
     }
-
+   
+    int positionXDecoupe = m_frameActuelle * m_frameLargeur;
+m_sprite.setTextureRect(sf::IntRect(
+    {positionXDecoupe, 0},
+    {m_frameLargeur, m_frameHauteur}
+));
+ 
     if (!logique.estArrive()) {
         m_tempsAnimation += deltaTime;
         if (m_tempsAnimation >= m_vitesseAnimation) {

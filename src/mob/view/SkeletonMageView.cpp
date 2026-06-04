@@ -44,20 +44,18 @@ void SkeletonMageView::update(float deltaTime, const Monster& logique) {
         // Si ton image fait 576 pixels de large avec 8 squelettes, chaque case fait EXACTEMENT 72 pixels de large !
         // (72 * 8 = 576). C'est pour ça que le calcul avec 64 pixels décalait tout et clignotait !
         static const sf::IntRect rectanglesMort[] = {
-    sf::IntRect({0,   0}, {96, 64}),
-    sf::IntRect({96,  0}, {96, 64}),
-    sf::IntRect({192, 0}, {96, 64}),
-    sf::IntRect({288, 0}, {96, 64}),
-    sf::IntRect({384, 0}, {96, 64}),
-    sf::IntRect({480, 0}, {96, 64}),
-    sf::IntRect({576, 0}, {96, 64}),
-    sf::IntRect({672, 0}, {96, 64})
+    sf::IntRect({0,   0}, {64, 64}),
+    sf::IntRect({64,  0}, {64, 64}),
+    sf::IntRect({128, 0}, {64, 64}),
+    sf::IntRect({192, 0}, {64, 64}),
+    sf::IntRect({256, 0}, {64, 64}),
+    sf::IntRect({320, 0}, {64, 64})
 };
 
         // Sécurité : Premier instant de la mort, on initialise
         if (&m_sprite.getTexture() != &m_textureMort) {
         m_sprite.setTexture(m_textureMort);
-        m_sprite.setOrigin({ 96.f / 2.f, 52.f }); // ← adapte l'origine à la nouvelle largeur de frame
+        m_sprite.setOrigin({ 64.f / 2.f, 52.f }); // ← adapte l'origine à la nouvelle largeur de frame
         m_frameActuelle = 0;
         m_tempsAnimation = 0.f;
         m_sprite.setTextureRect(rectanglesMort[0]);
@@ -73,8 +71,8 @@ void SkeletonMageView::update(float deltaTime, const Monster& logique) {
         if (m_tempsAnimation >= 0.15f) { 
             m_tempsAnimation = 0.f;
             
-            // On avance dans notre tableau de 8 images (index 0 à 7)
-            if (m_frameActuelle < 7) { 
+            // 
+            if (m_frameActuelle < 5) { // On a 6 frames (index 0 à 5)
                 m_frameActuelle++;
                 // On applique le rectangle exact sans faire de calcul mathématique multiplicateur
                 m_sprite.setTextureRect(rectanglesMort[m_frameActuelle]);
