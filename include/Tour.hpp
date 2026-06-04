@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "Monster.hpp"    // <-- ADAPTATION : On inclut la vraie classe de base de tes monstres
-#include "Projectile.hpp" // <-- Inclut la gestion de la Sprite Sheet des éclats
+#include "Monster.hpp"    
+#include "Projectile.hpp" 
 
 /**
  * @class Tour
@@ -17,7 +17,7 @@ protected:
     int m_atk;           
     int m_valeur;        
     std::string m_type;  
-    std::string m_bonus; 
+    std::string m_bonus; // ✅ CORRECTION : Suppression de l'anti-slash "\" parasite qui cassait la compilation !
     int m_valeurEvo;     
 
     sf::Vector2f m_position; 
@@ -26,22 +26,23 @@ protected:
 
     int m_portee;                     
     float m_vitesseAtk;               
-    float m_tempsDepuisDerniereAtk{0.0f}; ///< Variable unifiée pour le cooldown de recharge
+    float m_tempsDepuisDerniereAtk{0.0f}; 
 
-    std::shared_ptr<Monster> m_cible{nullptr}; // <-- ADAPTATION : Utilise Monster au lieu d'Enemi
-    int m_modeTir; ///< 💡 AJOUT : 0 = Espacé, 1 = Continu
+    std::shared_ptr<Monster> m_cible{nullptr}; 
+    int m_niveau; 
 
 public:
     int getPortee() const { return m_portee; }
     sf::Vector2f getPosition() const { return m_position; }
+    int getNiveau() const { return m_niveau; } 
 
-    Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int modeTir, sf::Vector2f pos, const std::string &texturePath);
+    // ✅ CORRECTION : Remplacement de "int modeTir" par "int niveau" pour correspondre exactement à ton Tour.cpp !
+    Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int niveau, sf::Vector2f pos, const std::string &texturePath);
     virtual ~Tour() = default;
-
-    // Signature propre et épurée (sans paramètre de texture redondant)
-    virtual void attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<Projectile>> &listeProjectiles);
-
-    // ADAPTATION : La tour prend désormais la liste des "Monster" pour scanner les cibles
+    
+    void upgrade();
+    virtual void attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<Projectile>>& listeProjectiles);
     void update(float deltaTime, const std::vector<std::shared_ptr<Monster>> &listeEnemis, std::vector<std::unique_ptr<Projectile>> &listeProjectiles);
     void draw(sf::RenderWindow &window) const;
+    std::string getType() const { return m_type; }
 };

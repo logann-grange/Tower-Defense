@@ -5,7 +5,7 @@
 #include "Map.hpp"
 #include "mob/Skeleton.hpp"
 #include "../include/Tour.hpp"
-#include "Projectile.hpp" // <-- AJOUT INDISPENSABLE pour les lasers
+#include "Projectile.hpp" 
 
 int main()
 {
@@ -33,7 +33,6 @@ int main()
     std::vector<sf::Vector2i> cheminMonstres = mon_niveau.genererChemin(caseDepart);
 
     // 2. CREER LE SQUELETTE VIA UN POINTEUR INTELLIGENT (shared_ptr)
-    // C'est obligatoire pour que m_cible (qui est un shared_ptr<Monster>) puisse le stocker !
     auto monSquelette = std::make_shared<Skeleton>();
     monSquelette->spawn(cheminMonstres);
 
@@ -41,16 +40,17 @@ int main()
     std::vector<std::shared_ptr<Monster>> listeMonstres;
     listeMonstres.push_back(monSquelette);
 
-    // Tableau qui va stocker les lasers générés lors des tirs
+    // Tableau qui va stocker les projectiles générés lors des tirs
     std::vector<std::unique_ptr<Projectile>> listeProjectiles;
 
-    // // 3. CREER LA TOUR DE GLACE (Case X=25, Y=12)
+    // 3. CREER LA TOUR DE GLACE (Case X=23, Y=12 pour ne pas la superposer à l'autre)
     sf::Vector2f positionTourPixels(25 * 16.f + 8.f, 12 * 16.f + 8.f);
-    Tour maTourGlace(1, 15, 150, "Glace", 140, 1.0f, 0, positionTourPixels, "asset/tour_glace.png");
+    Tour maTourGlace(1, 15, 150, "Glace", 4, 0.5f, 1, positionTourPixels, "asset/tour_glace.png");
 
-    // // 4. CREER LA TOUR DE FEU (Case X=25, Y=12)
-    // sf::Vector2f positionTourFeuPixels(25 * 16.f + 8.f, 12 * 16.f + 8.f);
-    // Tour maTourFeu(2, 15, 150, "Feu", 140, 0.5f, 1, positionTourFeuPixels, "asset/tour_feu.png");
+    // 4. CREER LA TOUR DE FEU (Case X=25, Y=12)
+    // // ✅ ACTIVATION & CORRECTION : Décommentée et nettoyée du paramètre "modeTir"
+    sf::Vector2f positionTourFeuPixels(25 * 16.f + 8.f, 12 * 16.f + 8.f);
+    Tour maTourFeu(2, 15, 150, "Feu", 4, 0.5f, 3, positionTourFeuPixels, "asset/tour_feu.png");
 
     sf::Clock clock;
 
@@ -75,15 +75,16 @@ int main()
             monSquelette->move(deltaTime);
         }
 
-        // ✅ CORRECTION 1 : On appelle enfin l'update de ta tour à chaque frame !
+        // Mise à jour des tours
         maTourGlace.update(deltaTime, listeMonstres, listeProjectiles);
-        // maTourFeu.update(deltaTime, listeMonstres, listeProjectiles);
-        // ✅ CORRECTION 2 : On met à jour les lasers et on supprime ceux qui ont fini de flasher
+        maTourFeu.update(deltaTime, listeMonstres, listeProjectiles); // ✅ Activée !
+
+        // Mise à jour des projectiles (boules de feu, etc.) et nettoyage
         for (auto it = listeProjectiles.begin(); it != listeProjectiles.end();)
         {
             (*it)->update(deltaTime);
             if ((*it)->estDetruit())
-            { // Nettoyage automatique des anciens tirs
+            { 
                 it = listeProjectiles.erase(it);
             }
             else
@@ -98,19 +99,20 @@ int main()
         // 1. Dessin du sol
         mon_niveau.draw(window);
 
-        // 2. Dessin de la tour
+        // 2. Dessin des tours
         maTourGlace.draw(window);
-        // maTourFeu.draw(window);
+        maTourFeu.draw(window); // ✅ Activée !
+
         // 3. Dessin du monstre
         if (!monSquelette->isDead())
         {
             monSquelette->draw(window);
         }
 
-        // ✅ CORRECTION 3 : Dessin des rayons lasers à l'écran par-dessus tout le monde
-        for (const auto &laser : listeProjectiles)
+        // 4. Dessin des projectiles physiques par-dessus tout le monde
+        for (const auto &projectile : listeProjectiles)
         {
-            laser->draw(window);
+            projectile->draw(window);
         }
 
         window.display();

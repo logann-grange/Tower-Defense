@@ -18,7 +18,7 @@ public:
     void move(float deltaTime) override;
     void mourir() override;
     void attaquer() override;
-    // 💡 AJOUT : On remplace la fonction par les vrais pixels ultra-précis du squelette
+    
     sf::Vector2f getPosition() const override
     {
         return m_positionPixels;
@@ -30,14 +30,14 @@ private:
     std::vector<sf::Vector2i> m_chemin;
     size_t m_indexEtapeActuelle;
     sf::Texture m_texture;
-    sf::Sprite m_sprite;
+    // ❌ CORRECTION : Suppression de "sf::Sprite m_sprite;" d'ici pour utiliser celui de Monster !
     int dmg;
     std::string faiblesse;
 
-    int m_frameLargeur = 64; // À changer en 32 si ton sprite fait 32x32 !
-    int m_frameHauteur = 64; // À changer en 32 si ton sprite fait 32x32 !
-    int m_nbFramesMax = 6;   // Ton image contient 8 squelettes horizontaux
-    int m_frameActuelle = 0; // L'index de l'image en cours (0 à 7)
+    int m_frameLargeur = 64; 
+    int m_frameHauteur = 64; 
+    int m_nbFramesMax = 6;   
+    int m_frameActuelle = 0; 
 
     float m_tempsAnimation = 0.f;
     float m_vitesseAnimation = 0.1f;

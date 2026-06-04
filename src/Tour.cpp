@@ -4,16 +4,17 @@
 #include <cmath>
 #include <iostream>
 
-// ✅ Constructeur corrigé : ajout du paramètre "int modeTir" et correction de l'initialisation de m_modeTir
-Tour::Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int modeTir, sf::Vector2f pos, const std::string &texturePath)
+// ✅ Constructeur SFML 3 corrigé : Utilisation stricte de m_niveau au lieu de modeTir
+Tour::Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int niveau, sf::Vector2f pos, const std::string &texturePath)
     : m_id(id), m_atk(atk), m_valeur(valeur), m_type(type), m_portee(portee),
-      m_vitesseAtk(vitesseAtk), m_modeTir(modeTir), m_position(pos), m_valeurEvo(valeur * 0.6f),
+      m_vitesseAtk(vitesseAtk), m_niveau(niveau), m_position(pos), m_valeurEvo(valeur * 0.6f),
       m_tempsDepuisDerniereAtk(0.0f),
-      m_sprite(m_texture) 
+      m_sprite(m_texture) // ✅ Initialisation requise en SFML 3
 {
     if (m_texture.loadFromFile(texturePath))
     {
-        m_sprite.setTexture(m_texture);
+        // ✅ Le paramètre 'true' force SFML 3 à recalculer la taille interne du Sprite
+        m_sprite.setTexture(m_texture, true); 
         
         auto textureSize = m_texture.getSize();
         m_sprite.setTextureRect(sf::IntRect({0, 0}, {static_cast<int>(textureSize.x), static_cast<int>(textureSize.y)}));
@@ -34,6 +35,10 @@ void Tour::update(float deltaTime, const std::vector<std::shared_ptr<Monster>> &
 {
     m_tempsDepuisDerniereAtk += deltaTime;
 
+    // 💡 Astuce : On convertit la portée (ex: 3 cases) en pixels (3 * 16 = 48 pixels)
+    float porteeEnPixels = m_portee * 16.0f;
+    float porteeEnPixelsSq = std::pow(porteeEnPixels, 2);
+
     if (m_cible)
     {
         if (m_cible->isDead())
@@ -47,7 +52,8 @@ void Tour::update(float deltaTime, const std::vector<std::shared_ptr<Monster>> &
             float distSq = std::pow(posCible.x - m_position.x, 2) +
                            std::pow(posCible.y - m_position.y, 2);
 
-            if (distSq > std::pow(m_portee, 2))
+            // ✅ Utilisation de la portée corrigée en pixels
+            if (distSq > porteeEnPixelsSq)
             {
                 m_cible = nullptr; 
             }
@@ -56,7 +62,8 @@ void Tour::update(float deltaTime, const std::vector<std::shared_ptr<Monster>> &
 
     if (!m_cible)
     {
-        float distanceMinSq = std::pow(m_portee, 2);
+        // ✅ On commence la recherche avec notre rayon d'action maximum en pixels
+        float distanceMinSq = porteeEnPixelsSq;
 
         for (const auto &enemi : listeEnemis)
         {
@@ -88,17 +95,30 @@ void Tour::draw(sf::RenderWindow &window) const
     window.draw(m_sprite);
 }
 
-// ✅ Fonction attaquée corrigée : Traduction du chiffre m_modeTir vers le projectile
+// ✅ Fonction d'attaque : Transmet le niveau de manière 100% fiable au projectile
 void Tour::attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<Projectile>>& listeProjectiles)
 {
     if (cible)
     {
-        // On traduit le int (0 ou 1) de la tour vers l'Enum (Espace ou Continu) attendu par le projectile
-        ModeTir modeDuLaser = (m_modeTir == 1) ? ModeTir::Continu : ModeTir::Espace;
-
-        // On passe "modeDuLaser" en dernier paramètre !
-        listeProjectiles.push_back(std::make_unique<Projectile>(m_position, cible, m_atk, m_type, modeDuLaser));
+        // On donne m_niveau pour charger l'image correspondante (1, 2 ou 3) !
+        listeProjectiles.push_back(std::make_unique<Projectile>(m_position, cible, m_atk, m_type, m_niveau));
         
-        std::cout << "[TOUR] Tir d'un rayon laser (" << m_type << ") en mode chiffre : " << m_modeTir << " !\n";
+        std::cout << "[TOUR] Tir d'un projectile (" << m_type << ") de niveau " << m_niveau << " !\n";
     }
+}
+
+// 💡 BONUS : Ajout de la fonction d'amélioration pour tester tes projectiles géants en jeu !
+void Tour::upgrade()
+{
+    if (m_niveau < 3)
+    {
+        m_niveau++;
+        m_atk += 15; // Augmente la puissance
+        std::cout << "[EVOLUTION] La tour " << m_type << " passe au niveau " << m_niveau << " !\n";
+    }
+}
+
+std::string Tour::getType() const 
+{ 
+    return m_type; 
 }
