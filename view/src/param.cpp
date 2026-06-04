@@ -1,6 +1,8 @@
-#include "./../include/param.hpp"
+#include "param.hpp"
 
 Param::Param(int sound) {
+
+    this->sound = sound;
     // chargement des texture du background
     if (!bgTexture.loadFromFile("assets/UI/backgroundParam.png")) {
         std::cout << "ERREUR: texture de fond introuvable !" << std::endl;
@@ -10,10 +12,10 @@ Param::Param(int sound) {
     bgSprite->setScale({500.f/bgTexture.getSize().x, 720.f/bgTexture.getSize().y});
 
     //chargement des boutons
-    buttonList.emplace_back(Vector2f(800, 550),  Vector2f(50, 50), "assets/UI/icone bouton/icone_plus.png",  "");
-    buttonList.emplace_back(Vector2f(1065, 550),  Vector2f(50, 50), "assets/UI/icone bouton/icone_moins.png", "");
-    buttonList.emplace_back(Vector2f(1150, 300),  Vector2f(50, 50), "assets/UI/icone bouton/icone_close.png", "");
-    buttonList.emplace_back(Vector2f((1920-400)/2, 750),  Vector2f(400,100), "assets/UI/icone bouton/bouton_bleu.png",  "CREDITS");
+    buttonList.emplace_back(Vector2f(800, 550),  Vector2f(50, 50), "assets/UI/icone bouton/icone_plus.png",  "VOLUMEPLUS", false);
+    buttonList.emplace_back(Vector2f(1065, 550),  Vector2f(50, 50), "assets/UI/icone bouton/icone_moins.png", "VOLUMEMOINS", false);
+    buttonList.emplace_back(Vector2f(1150, 300),  Vector2f(50, 50), "assets/UI/icone bouton/icone_close.png", "RETOUR", false);
+    buttonList.emplace_back(Vector2f((1920-400)/2, 750),  Vector2f(400,100), "assets/UI/icone bouton/bouton_bleu.png",  "CREDITS", true);
 
     //chargement de la police
     font = make_unique<Font>();
@@ -35,6 +37,10 @@ Param::Param(int sound) {
 
 void Param::changeVolume(int volume) {
     this->sound += volume;
+    this->sound = ((this->sound %11) + 11) % 11; // gère les limmite 
+    volumeLabel = make_unique<Text>(*font, to_string(sound), 24);
+    volumeLabel->setFillColor(Color(255, 174, 0));
+    volumeLabel->setPosition({935, 565});
 }
 
 void Param::displaySound(RenderWindow &window){

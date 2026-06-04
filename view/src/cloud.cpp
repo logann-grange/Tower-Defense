@@ -1,4 +1,4 @@
-#include "./../include/cloud.hpp"
+#include "cloud.hpp"
 
 Cloud::Cloud(string file, Vector2f coord, float speed) {
 

@@ -4,23 +4,28 @@
 #include <memory>
 #include <optional>
 
+using namespace std;
+using namespace sf;
+
 class Bouton {
 public:
-    std::string text;
-    Bouton(sf::Vector2f coord, sf::Vector2f size, std::string image, std::string text);
+    string text;
+    string action;
+    bool isLabel;
+    Bouton(Vector2f coord, Vector2f size, string image, string text, bool isLabel);
 
-    void display(sf::RenderWindow &window);
-    bool isHover(sf::RenderWindow &window);
-    bool clicOn(sf::RenderWindow &window);
+    void display(RenderWindow &window);
+    bool isHover(RenderWindow &window);
+    bool clicOn(RenderWindow &window);
 
 private:
-    sf::Vector2f coord;
-    sf::Vector2f size;
-    std::string image;
+    Vector2f coord;
+    Vector2f size;
+    string image;
 
-    sf::RectangleShape box;
-    sf::Texture texture;
+    RectangleShape box;
+    Texture texture;
 
-    std::unique_ptr<sf::Font> font; 
-    std::unique_ptr<sf::Text> label;
+    unique_ptr<Font> font; 
+    unique_ptr<Text> label;
 };

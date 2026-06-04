@@ -1,13 +1,22 @@
-#include "./../include/controlManager.hpp"
+#include "controlManager.hpp"
 #include <iostream>
 
-ControlManager::ControlManager(Menu& menu) : menu(menu) {
+ControlManager::ControlManager(std::vector<Bouton>& initialButtons)
+    : activeButtons(&initialButtons)
+{
     labelToAction = {
-        {"JOUER",      Action::JOUER},
-        {"SCORES",     Action::SCORES},
-        {"PARAMETRES", Action::PARAMETRES},
-        {"QUITTER",    Action::QUITTER}
+        {"JOUER",        Action::JOUER},
+        {"SCORES",       Action::SCORES},
+        {"PARAMETRES",   Action::PARAMETRES},
+        {"QUITTER",      Action::QUITTER},
+        {"RETOUR",       Action::RETOUR},
+        {"VOLUMEPLUS",   Action::VOLUMEPLUS},
+        {"VOLUMEMOINS",  Action::VOLUMEMOINS},
     };
+}
+
+void ControlManager::setActiveButtons(std::vector<Bouton>& buttons) {
+    activeButtons = &buttons;
 }
 
 ControlManager::Action ControlManager::resolveLabel(const std::string& label) const {
@@ -17,7 +26,6 @@ ControlManager::Action ControlManager::resolveLabel(const std::string& label) co
     return Action::NONE;
 }
 
-// À appeler dans la boucle d'événements (sf::Event::MouseButtonPressed)
 ControlManager::Action ControlManager::handleEvent(sf::RenderWindow& window, const sf::Event& event) {
     if (const auto* mouseEvent = event.getIf<sf::Event::MouseButtonPressed>()) {
         if (mouseEvent->button == sf::Mouse::Button::Left) {
@@ -27,13 +35,9 @@ ControlManager::Action ControlManager::handleEvent(sf::RenderWindow& window, con
     return Action::NONE;
 }
 
-// Vérifie quel bouton est cliqué via isHover + état de la souris
 ControlManager::Action ControlManager::pollActions(sf::RenderWindow& window) {
-    for (auto& btn : menu.buttonList) {
+    for (auto& btn : *activeButtons) {        // ← déréférence le pointeur
         if (btn.clicOn(window)) {
-            // On retrouve l'action via le texte du bouton
-            // (accès via getter ou ami — voir note ci-dessous)
-            // Ici on suppose que Bouton expose getText()
             Action action = resolveLabel(btn.text);
             execute(action);
             return action;
@@ -52,7 +56,7 @@ void ControlManager::execute(Action action) {
     if (it != callbacks.end()) {
         it->second();
     } else {
-        std::cout << "[ControlManager] Aucun callback pour l'action " 
+        std::cout << "[ControlManager] Aucun callback pour l'action "
                   << static_cast<int>(action) << std::endl;
     }
 }
