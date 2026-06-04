@@ -3,8 +3,8 @@
 #include <vector>
 #include <memory>
 #include "Map/Map.hpp"
-#include "mob/logic/SkeletonWarrior.hpp"
-#include "mob/view/SkeletonWarriorView.hpp"
+#include "mob/logic/SkeletonMage.hpp"
+#include "mob/view/SkeletonMageView.hpp"
 
 // Structure pour lier la logique et le visuel de chaque monstre
 struct MonstreInstance {
@@ -43,8 +43,8 @@ int main() {
     // CHANGEMENT ICI : On crée UN SEUL monstre au lieu de 5
     // =======================================================
     MonstreInstance m;
-    m.logique = std::make_unique<SkeletonWarrior>();
-    m.graphique = std::make_unique<SkeletonWarriorView>();
+    m.logique = std::make_unique<SkeletonMage>();
+    m.graphique = std::make_unique<SkeletonMageView>();
     
     m.logique->spawn(cheminMonstres);
     listeMonstres.push_back(std::move(m)); // Ajout de l'unique squelette
@@ -95,8 +95,8 @@ int main() {
         // --- B. NETTOYAGE INTELLIGENT DE LA MÉMOIRE (Le Culling) ---
         for (auto it = listeMonstres.begin(); it != listeMonstres.end(); ) {
             
-            // On récupère le pointeur de la vue et on le convertit en SkeletonWarriorView pour lire sa variable de mort
-            auto squeletteGraphique = dynamic_cast<SkeletonWarriorView*>(it->graphique.get());
+            // On récupère le pointeur de la vue et on le convertit en SkeletonMageView pour lire sa variable de mort
+            auto squeletteGraphique = dynamic_cast<SkeletonMageView*>(it->graphique.get());
 
             // CAS 1 : Le monstre est mort ET son animation de mort au sol est 100% terminée
             if (it->logique->estMort() && squeletteGraphique && squeletteGraphique->estPretADetruire()) {
