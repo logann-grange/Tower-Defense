@@ -1,6 +1,5 @@
 #include "./../include/menu.hpp"
 Menu::Menu(string background) {
-    std::cout << "Chargement texture: " << background << std::endl;
     
     // chargement des texture du background
     if (!bgTexture.loadFromFile(background)) {
@@ -19,7 +18,6 @@ Menu::Menu(string background) {
         std::cout << "ERREUR: texture du cadre introuvable !" << std::endl;
     }
     bgFrameSprite.emplace(bgFrameTexture);
-    std::cout << "OK: sprite créé" << std::endl;
 
     // chargement des texture du titre
     if (!titleTexture.loadFromFile("assets/background/menu/titre.png")) {
@@ -63,6 +61,9 @@ void Menu::displayButton(RenderWindow &window) {
 void Menu::display(RenderWindow &window) {
     this->displayBackground(window);
     this->displayButton(window);
+    sf::RectangleShape overlay(sf::Vector2f(window.getSize()));
+    overlay.setFillColor(sf::Color(0, 0, 0, 50)); // alpha : 0 = invisible, 255 = noir total
+    window.draw(overlay);
 }
 
 void Menu::displayCloud(RenderWindow &window) {

@@ -2,6 +2,7 @@
 #include "view/include/bouton.hpp"
 #include "view/include/menu.hpp"
 #include "controller/include/controlManager.hpp"
+#include "view/include/param.hpp"
 #include <iostream>
 
 int main() {
@@ -12,6 +13,8 @@ int main() {
     //MENU
     Menu menu = Menu("assets/background/menu/bg_14.png");
     ControlManager ctrl(menu);
+
+    Param param = Param(10);
 
     ctrl.bindAction(ControlManager::Action::JOUER,      [&]() { /* lancer la partie */ });
     ctrl.bindAction(ControlManager::Action::SCORES,     [&]() { /* afficher scores  */ });
@@ -28,7 +31,8 @@ int main() {
 
         // Affichage
         window.clear(sf::Color::Black);    
-        menu.display(window);    
+        menu.display(window);
+        //param.display(window); 
         window.display();
     }
 }

@@ -27,7 +27,7 @@ public:
     // Enregistre un callback personnalisé pour une action
     void bindAction(Action action, std::function<void()> callback);
 
-    // Exécute le callback lié à l'action (si existant)
+    // Exécute le callback lié à l'action
     void execute(Action action);
 
 private:
