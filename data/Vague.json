@@ -1,0 +1,215 @@
+{
+  "vague1": {
+    "id": 1,
+    "monstres": [
+      {
+        "type": "Skeleton",
+        "spawnTime": 0
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 1.5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 3
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 4.5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 6
+      }
+    ]
+  },
+  "vague2": {
+    "id": 2,
+    "monstres": [
+      {
+        "type": "Skeleton",
+        "spawnTime": 0
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 1.5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 3
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 6.5
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 8
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 9.5
+      }
+    ]
+  },
+  "vague3": {
+    "id": 3,
+    "monstres": [
+      {
+        "type": "Skeleton",
+        "spawnTime": 0
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 1
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 2
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 3
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 4
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 6
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 7
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 8
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 10
+      }
+    ]
+  },
+  "vague4": {
+    "id": 4,
+    "monstres": [
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 0
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 0.5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 1
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 1.5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 2
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 3.5
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 4
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 5.5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 6
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 7
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 8.5
+      }
+    ]
+  },
+  "vague5": {
+    "id": 5,
+    "monstres": [
+      {
+        "type": "Skeleton",
+        "spawnTime": 0
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 0.5
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 1
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 1
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 2
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 2.5
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 3
+      },
+      {
+        "type": "Skeleton",
+        "spawnTime": 3.5
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 4
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 4.5
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 5.5
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 6
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 7
+      },
+      {
+        "type": "SkeletonWarrior",
+        "spawnTime": 7.5
+      },
+      {
+        "type": "SkeletonMage",
+        "spawnTime": 8.5
+      }
+    ]
+  }
+}

@@ -3,17 +3,8 @@
 #include <vector>
 #include <memory>
 #include "Map/Map.hpp"
-#include "mob/logic/SkeletonMage.hpp"
-#include "mob/view/SkeletonMageView.hpp"
-#include "mob/logic/SkeletonWarrior.hpp"
-#include "mob/view/SkeletonWarriorView.hpp"
-
-// Structure pour lier la logique et le visuel de chaque monstre
-struct MonstreInstance {
-    std::unique_ptr<Monster> logique;
-    std::unique_ptr<MonsterView> graphique;
-    bool recompenseDonnee = false; // Évite de donner l'or en boucle pendant qu'il tombe
-};
+#include "gestionVague/GestionVague.hpp"
+#include "gestionVague/MonstreInstance.hpp"
 
 int main() {
     // 1. FENÊTRE ET DIMENSIONS
@@ -44,14 +35,11 @@ int main() {
     // =======================================================
     // CHANGEMENT ICI : On crée UN SEUL monstre au lieu de 5
     // =======================================================
-    MonstreInstance m;
-    m.logique = std::make_unique<SkeletonWarrior>();
-    m.graphique = std::make_unique<SkeletonWarriorView>();
-    
-    m.logique->spawn(cheminMonstres);
-    listeMonstres.push_back(std::move(m)); // Ajout de l'unique squelette
-    std::cout << "Nb monstres : " << listeMonstres.size() << std::endl;
-
+   GestionVague gestionVague;
+    if (!gestionVague.loadFromFile("./data/Vague.json")) {
+       std::cerr << "Erreur : Impossible de charger le fichier de vagues !" << std::endl;
+       return -1;
+   }
     // 3. BOUCLE PRINCIPALE DU JEU
     while (window.isOpen()) {
         float deltaTime = clock.restart().asSeconds();
@@ -68,6 +56,13 @@ int main() {
                 }
             }
         }
+
+        gestionVague.update(deltaTime, listeMonstres, cheminMonstres); // ← AJOUTER
+
+// Passe à la vague suivante quand tout est mort
+if (gestionVague.vagueTerminee() && listeMonstres.empty()) {  // ← AJOUTER
+    gestionVague.passerVagueSuivante();                        // ← AJOUTER
+}                                                             // ← AJOUTER
 
         // --- A. MISE À JOUR LOGIQUE ET VISUELLE ---
         for (auto& monstre : listeMonstres) {
