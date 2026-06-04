@@ -11,6 +11,7 @@ public:
     // Fonctions virtuelles pures (égales à 0, donc pas de .cpp)
     virtual void update(float deltaTime, const Monster& logique) = 0;
     virtual void draw(sf::RenderWindow& window) = 0;
+    virtual bool estPretADetruire() const = 0; // Permet de savoir si l'animation de mort est terminée pour supprimer le monstre de la RAM
 };
 
 #endif // MONSTER_VIEW_HPP

@@ -54,6 +54,6 @@ void Monster::subirDegats(float montant, const std::string& typeDegat) {
 
     if (m_pvActuels <= 0.f) {
         m_pvActuels = 0.f;
-        std::cout << "Le monstre est mort ! Gain de " << m_orRecompense << " or." << std::endl;
+        
     }
 }

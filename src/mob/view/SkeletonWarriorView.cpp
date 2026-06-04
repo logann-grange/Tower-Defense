@@ -1,17 +1,17 @@
-#include "SkeletonView.hpp"
+#include "SkeletonWarriorView.hpp"
 
 // SFML 3 : On lie obligatoirement m_sprite à m_textureDroite dès le départ
-SkeletonView::SkeletonView() : m_sprite(m_textureDroite) {
+SkeletonWarriorView::SkeletonWarriorView() : m_sprite(m_textureDroite) {
     
-    // 1. Chargement des textures  C:\Users\bilal\OneDrive\Documents\Projet_tower_defence\asset\Skeleton_Crew\Skeleton-Base\Run
-    if (!m_textureDroite.loadFromFile("asset/Skeleton_Crew/Skeleton-Base/Run/Run2.png")) {
+    // 1. Chargement des textures  C:\Users\bilal\OneDrive\Documents\Projet_tower_defence\asset\Skeleton_Crew\Skeleton-Warrior\Run
+    if (!m_textureDroite.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png")) {
         std::cerr << "Erreur : Impossible de charger Run-Sheet.png" << std::endl;
     }
-    if (!m_textureGauche.loadFromFile("asset/Skeleton_Crew/Skeleton-Base/Run/Run_Reverse.png")) {
+    if (!m_textureGauche.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG_Reverse.png")) {
         std::cerr << "Erreur : Impossible de charger Run_Reverse.png" << std::endl;
     }
 
-    if (!m_textureMort.loadFromFile("asset/Skeleton_Crew/Skeleton-Base/Death/Death-Sheet.png")) {
+    if (!m_textureMort.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Death/Death-Sheet.png")) {
         std::cerr << "Erreur : Impossible de charger Death-Sheet.png" << std::endl;
     }
 
@@ -31,7 +31,7 @@ SkeletonView::SkeletonView() : m_sprite(m_textureDroite) {
     m_barrePV.setOrigin({20.f, 0.f});
 }
 
-void SkeletonView::update(float deltaTime, const Monster& logique) {
+void SkeletonWarriorView::update(float deltaTime, const Monster& logique) {
     // A. On aligne la position du sprite sur la position mathématique calculée par la logique
     if (m_animationMortTermine) return;
 
@@ -115,7 +115,7 @@ void SkeletonView::update(float deltaTime, const Monster& logique) {
         }
     }
 }
-void SkeletonView::draw(sf::RenderWindow& window) {
+void SkeletonWarriorView::draw(sf::RenderWindow& window) {
     window.draw(m_sprite);
     window.draw(m_barreFond);
     window.draw(m_barrePV);

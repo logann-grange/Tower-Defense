@@ -18,6 +18,15 @@ public:
 
     void subirDegats(float montant, const std::string& typeDegat);
 
+    bool doitInfligerDegats() {
+        if (m_arrive && !m_degatsInfliges && !estMort()) {
+            m_degatsInfliges = true;
+            return true;
+        }
+        return false;
+    }
+
+
     bool estMort() const { return m_pvActuels <= 0.f; }
     float getPvActuels() const { return m_pvActuels; }
     float getPvMax() const { return m_pvMax; }
@@ -42,6 +51,7 @@ protected:
     std::vector<sf::Vector2f> m_pointsCheminPixels;
     size_t m_indexEtape = 0;
     bool m_arrive = false;
+    bool m_degatsInfliges = false;
     Direction m_directionCourante = Direction::Droite;
 };
 

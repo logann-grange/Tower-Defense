@@ -1,14 +1,15 @@
-#ifndef SKELETON_VIEW_HPP
-#define SKELETON_VIEW_HPP
+#ifndef SKELETON_WARRIOR_VIEW_HPP
+#define SKELETON_WARRIOR_VIEW_HPP
+
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "../MonsterView.hpp"     // On remonte pour chercher l'interface de vue
-#include "../logic/Skeleton.hpp" // On remonte, puis on va dans logic
+#include "../logic/SkeletonWarrior.hpp" 
 
-class SkeletonView : public MonsterView {
-public:
-    SkeletonView();
+class SkeletonWarriorView : public MonsterView {
+    public:
+    SkeletonWarriorView();
     
     // Le mot-clé "override" confirme qu'on applique le contrat de MonsterView
     void update(float deltaTime, const Monster& logique) override;
@@ -38,4 +39,5 @@ private:
     float m_vitesseAnimation = 0.1f; // 100ms par image
 };
 
-#endif
+
+#endif // SKELETON_WARRIOR_VIEW_HPP
