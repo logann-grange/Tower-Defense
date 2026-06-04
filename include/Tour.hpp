@@ -29,12 +29,13 @@ protected:
     float m_tempsDepuisDerniereAtk{0.0f}; ///< Variable unifiée pour le cooldown de recharge
 
     std::shared_ptr<Monster> m_cible{nullptr}; // <-- ADAPTATION : Utilise Monster au lieu d'Enemi
+    int m_modeTir; ///< 💡 AJOUT : 0 = Espacé, 1 = Continu
 
 public:
     int getPortee() const { return m_portee; }
     sf::Vector2f getPosition() const { return m_position; }
 
-    Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, sf::Vector2f pos, const std::string &texturePath);
+    Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int modeTir, sf::Vector2f pos, const std::string &texturePath);
     virtual ~Tour() = default;
 
     // Signature propre et épurée (sans paramètre de texture redondant)

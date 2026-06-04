@@ -46,11 +46,11 @@ int main()
 
     // // 3. CREER LA TOUR DE GLACE (Case X=25, Y=12)
     sf::Vector2f positionTourPixels(25 * 16.f + 8.f, 12 * 16.f + 8.f);
-    Tour maTourGlace(1, 15, 150, "Glace", 140, 0.12f, positionTourPixels, "asset/tour_glace.png");
+    Tour maTourGlace(1, 15, 150, "Glace", 140, 1.0f, 0, positionTourPixels, "asset/tour_glace.png");
 
     // // 4. CREER LA TOUR DE FEU (Case X=25, Y=12)
     // sf::Vector2f positionTourFeuPixels(25 * 16.f + 8.f, 12 * 16.f + 8.f);
-    // Tour maTourFeu(2, 15, 150, "Feu", 140, 0.12f, positionTourFeuPixels, "asset/tour_feu.png");
+    // Tour maTourFeu(2, 15, 150, "Feu", 140, 0.5f, 1, positionTourFeuPixels, "asset/tour_feu.png");
 
     sf::Clock clock;
 
