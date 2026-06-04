@@ -101,6 +101,6 @@ void Tour::attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<
     {
         // On envoie la position de base de la tour, le projectile s'occupera du sommet !
         listeProjectiles.push_back(std::make_unique<Projectile>(m_position, cible, m_atk, m_type));
-        std::cout << "[TOUR] Tir d'un rayon laser givrant !\n";
+        std::cout << "[TOUR] Tir d'un rayon laser !\n";
     }
 }
