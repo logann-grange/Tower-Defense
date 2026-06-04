@@ -1,0 +1,38 @@
+[
+{
+  "directory": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/TowerDefense.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\TowerDefense.dir\\src\\main.cpp.obj -c \"C:\\Users\\dmari\\Bureau\\Cours JVSI\\Start C++\\Tower-Defense-Mohamed\\src\\main.cpp\"",
+  "file": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/src/main.cpp",
+  "output": "CMakeFiles/TowerDefense.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/TowerDefense.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\TowerDefense.dir\\src\\Map.cpp.obj -c \"C:\\Users\\dmari\\Bureau\\Cours JVSI\\Start C++\\Tower-Defense-Mohamed\\src\\Map.cpp\"",
+  "file": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/src/Map.cpp",
+  "output": "CMakeFiles/TowerDefense.dir/src/Map.cpp.obj"
+},
+{
+  "directory": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/TowerDefense.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\TowerDefense.dir\\src\\mob\\Monster.cpp.obj -c \"C:\\Users\\dmari\\Bureau\\Cours JVSI\\Start C++\\Tower-Defense-Mohamed\\src\\mob\\Monster.cpp\"",
+  "file": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/src/mob/Monster.cpp",
+  "output": "CMakeFiles/TowerDefense.dir/src/mob/Monster.cpp.obj"
+},
+{
+  "directory": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/TowerDefense.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\TowerDefense.dir\\src\\mob\\Skeleton.cpp.obj -c \"C:\\Users\\dmari\\Bureau\\Cours JVSI\\Start C++\\Tower-Defense-Mohamed\\src\\mob\\Skeleton.cpp\"",
+  "file": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/src/mob/Skeleton.cpp",
+  "output": "CMakeFiles/TowerDefense.dir/src/mob/Skeleton.cpp.obj"
+},
+{
+  "directory": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/TowerDefense.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\TowerDefense.dir\\src\\Tour.cpp.obj -c \"C:\\Users\\dmari\\Bureau\\Cours JVSI\\Start C++\\Tower-Defense-Mohamed\\src\\Tour.cpp\"",
+  "file": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/src/Tour.cpp",
+  "output": "CMakeFiles/TowerDefense.dir/src/Tour.cpp.obj"
+},
+{
+  "directory": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/TowerDefense.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\TowerDefense.dir\\src\\Projectile.cpp.obj -c \"C:\\Users\\dmari\\Bureau\\Cours JVSI\\Start C++\\Tower-Defense-Mohamed\\src\\Projectile.cpp\"",
+  "file": "C:/Users/dmari/Bureau/Cours JVSI/Start C++/Tower-Defense-Mohamed/src/Projectile.cpp",
+  "output": "CMakeFiles/TowerDefense.dir/src/Projectile.cpp.obj"
+}
+]
