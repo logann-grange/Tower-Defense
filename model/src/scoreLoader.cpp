@@ -9,12 +9,12 @@ using json = nlohmann::json;
 
 ScoreLoader::ScoreLoader() {}
 
-std::vector<Score> ScoreLoader::loadScoresFromJson(string filename) {
-    std::vector<Score> scores;
+vector<Score> ScoreLoader::loadScoresFromJson(string filename) {
+    vector<Score> scores;
 
-    std::ifstream file(filename);
+    ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Erreur : impossible d'ouvrir " << filename << std::endl;
+        cerr << "Erreur : impossible d'ouvrir " << filename << endl;
         return scores;
     }
 
@@ -31,6 +31,15 @@ std::vector<Score> ScoreLoader::loadScoresFromJson(string filename) {
 
         scores.emplace_back(name, points, pv, t);
     }
+
+    // Trier par points décroissant
+    sort(scores.begin(), scores.end(), [](const Score &a, const Score &b) {
+        return a.points > b.points;
+    });
+
+    // Garder seulement les 10 meilleurs
+    if (scores.size() > 10)
+        scores.resize(10);
 
     return scores;
 }

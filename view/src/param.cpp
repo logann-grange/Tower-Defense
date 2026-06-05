@@ -48,17 +48,16 @@ void Param::displaySound(RenderWindow &window){
     window.draw(*volumeLabel);
     window.draw(*paramLabel);
 
-    //boutons
-    int i = 0;
-    for (auto& btn : this->buttonList) {
-        btn.display(window);
-    }
-
 }
 
 void Param::display(RenderWindow &window) {
     window.draw(*bgSprite);
     this->displaySound(window);
+    //boutons
+    int i = 0;
+    for (auto& btn : this->buttonList) {
+        btn.display(window);
+    }
     
 }
 

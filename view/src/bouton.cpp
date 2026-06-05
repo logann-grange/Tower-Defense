@@ -33,7 +33,7 @@ void Bouton::display(RenderWindow &window) {
     Vector2u texSize = texture.getSize();
     sprite.setScale({size.x / texSize.x, size.y / texSize.y});
 
-    if (isHover(window) && this->text == "QUITTER") {
+    if (isHover(window) && (this->text == "QUITTER" || this->text == "RETOUR")) {
         sprite.setColor(sf::Color(255, 100, 100));
         label->setFillColor(sf::Color::Yellow);
     } else if (isHover(window)) {

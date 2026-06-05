@@ -36,7 +36,7 @@ ControlManager::Action ControlManager::handleEvent(sf::RenderWindow& window, con
 }
 
 ControlManager::Action ControlManager::pollActions(sf::RenderWindow& window) {
-    for (auto& btn : *activeButtons) {        // ← déréférence le pointeur
+    for (auto& btn : *activeButtons) {  
         if (btn.clicOn(window)) {
             Action action = resolveLabel(btn.text);
             execute(action);

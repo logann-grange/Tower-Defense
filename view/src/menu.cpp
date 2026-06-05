@@ -37,6 +37,7 @@ Menu::Menu(string background) {
     this->cloud.push_back(make_unique<Cloud>("assets/background/menu/big_cloud.png", Vector2f(-100, -50), 0.5));
     this->cloud.push_back(make_unique<Cloud>("assets/background/menu/cloud.png", Vector2f(300, 100), 1));  
 
+    //BOUTONS
     buttonList.emplace_back(Vector2f((1920-400)/2, 300),  Vector2f(400,100), "assets/UI/icone bouton/bouton_bleu.png",  "JOUER", true);
     buttonList.emplace_back(Vector2f((1920-400)/2, 475),  Vector2f(400,100), "assets/UI/icone bouton/bouton_bleu.png",  "SCORES", true);
     buttonList.emplace_back(Vector2f((1920-400)/2, 650),  Vector2f(400,100), "assets/UI/icone bouton/bouton_bleu.png",  "PARAMETRES", true);
