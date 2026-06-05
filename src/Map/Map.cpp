@@ -40,6 +40,7 @@ bool Map::loadFromFile(const std::string& ldtkFilename) {
             }
         }
         
+
         // B. Calque d'ENTITÉS (Recherche du Spawn)
         if (layer["__type"] == "Entities") {
             for (auto& entity : layer["entityInstances"]) {
@@ -50,6 +51,12 @@ bool Map::loadFromFile(const std::string& ldtkFilename) {
                     std::cout << "SUCCESS : Entite Monster_spawn trouvee en case : (" 
                               << m_pointDepart.x << ", " << m_pointDepart.y << ")\n";
                 }
+                if (entity["__identifier"] == "Objectif") {
+                    m_positionObjectif.x = entity["px"][0].get<int>();
+                    m_positionObjectif.y = entity["px"][1].get<int>();
+                    std::cout << "SUCCESS : Objectif trouve en px : ("
+                                << m_positionObjectif.x << ", " << m_positionObjectif.y << ")\n";
+        }
             }
         }
         
@@ -165,5 +172,10 @@ std::vector<sf::Vector2i> Map::genererChemin(sf::Vector2i pointDepart) {
 
     return chemin;
 }
+
+sf::Vector2i Map::getPositionObjectif() const {
+    return m_positionObjectif;
+}
+
 int Map::getWidth() const { return m_width; }
 int Map::getHeight() const { return m_height; }

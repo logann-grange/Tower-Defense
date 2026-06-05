@@ -5,6 +5,7 @@
 #include "Map/Map.hpp"
 #include "gestionVague/GestionVague.hpp"
 #include "gestionVague/MonstreInstance.hpp"
+#include "castle/logic/Castle.hpp"
 
 int main() {
     // 1. FENÊTRE ET DIMENSIONS
@@ -24,9 +25,12 @@ int main() {
     sf::Vector2i caseDepart = mon_niveau.trouverPointDepartDepuisEntite(); 
     std::vector<sf::Vector2i> cheminMonstres = mon_niveau.genererChemin(caseDepart);
 
+    
+    Castle castle;
+    castle.initialiser(mon_niveau.getPositionObjectif());
     // 2. ÉCONOMIE ET STATS DU JOUEUR
     int orJoueur = 100;
-    int pvJoueur = 20;
+
 
     // Tableau dynamique (vector) pour stocker nos monstres
     std::vector<MonstreInstance> listeMonstres;
@@ -72,8 +76,8 @@ if (gestionVague.vagueTerminee() && listeMonstres.empty()) {  // ← AJOUTER
 
                 // Si le monstre passe la ligne d'arrivée
                 if (monstre.logique->doitInfligerDegats()) {
-                    pvJoueur -= monstre.logique->getDegatsBase();
-                    std::cout << "Aie ! Base touchee ! PV restants : " << pvJoueur << std::endl;
+                    castle.takeDamage(monstre.logique->getDegatsBase());
+                    std::cout << "Aie ! Base touchee ! PV restants : " << castle.getHealth() << std::endl;
                 }
             }
             else {

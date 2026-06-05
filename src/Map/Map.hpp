@@ -22,6 +22,8 @@ public:
     
     std::vector<sf::Vector2i> genererChemin(sf::Vector2i pointDepart);
     sf::Vector2i trouverPointDepartDepuisEntite() const;
+    sf::Vector2i getPositionObjectif() const;
+
 
     int getWidth() const ;
     int getHeight() const;
@@ -44,6 +46,8 @@ private:
     inline static const int VAL_VIDE = 0;
     inline static const int VAL_TOURS = 1;     // Zone constructible pour les tours
     inline static const int VAL_CHEMIN = 2;    // "zone_de_chemin" dans ton LDtk
+
+    sf::Vector2i m_positionObjectif; // Contiendra la position de la ligne d'arrivée (objectif final des monstres)
 
     std::vector<std::vector<int>> m_grid; // Grille de logique (IntGrid)
     std::vector<std::vector<TileInfo>> m_layerTiles; // Couches visuelles
