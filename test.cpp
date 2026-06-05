@@ -6,6 +6,9 @@
 #include "tabScores.hpp"
 #include "controlManager.hpp"
 #include "soundManager.hpp"
+#include "Map.hpp"
+#include "store.hpp"
+#include "towerCard.hpp"
 #include <iostream>
 
 int main() {
@@ -16,6 +19,7 @@ int main() {
     Param param(10);
     tabScores score = tabScores();
     SoundManager snd;
+    Store store = Store(1000);
 
     ControlManager ctrl(menu.buttonList);
     int state = 1;
@@ -57,6 +61,13 @@ int main() {
         snd.setVolume(param.sound);
     });
 
+    Map map = Map();
+    map.loadFromFile("assets/map/map_tower_defence.ldtk");
+
+    View vueJeu(FloatRect({0.f, 0.f}, {900.f, 528.f}));
+    window.setView(vueJeu);
+
+
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             ctrl.handleEvent(window, *event);
@@ -68,6 +79,8 @@ int main() {
         menu.display(window);
         if (state == 4) param.display(window);
         if (state == 3) score.display(window);
+        map.draw(window);
+        store.display(window);
         window.display();
     }
 }
