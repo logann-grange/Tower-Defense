@@ -21,6 +21,7 @@ int main() {
     int state = 1;
 
     snd.playMusic("menu");
+    snd.setVolume(param.sound);
 
     ctrl.bindAction(ControlManager::Action::JOUER, [&]() {
         snd.playButtonSound("JOUER");
@@ -48,10 +49,12 @@ int main() {
     ctrl.bindAction(ControlManager::Action::VOLUMEPLUS, [&]() {
         snd.playButtonSound("VOLUMEPLUS");
         param.changeVolume(+1);
+        snd.setVolume(param.sound);
     });
     ctrl.bindAction(ControlManager::Action::VOLUMEMOINS, [&]() {
         snd.playButtonSound("VOLUMEMOINS");
         param.changeVolume(-1);
+        snd.setVolume(param.sound);
     });
 
     while (window.isOpen()) {

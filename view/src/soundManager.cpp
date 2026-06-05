@@ -9,7 +9,7 @@ void SoundManager::playMusic(const string& gameState) {
     else if (gameState == "game")
         file = "assets/sounds/music_game.wav";
 
-    if (!music.openFromFile(file)) {  // méthode d'instance, pas statique
+    if (!music.openFromFile(file)) { //chargement de la musique
         cout << "Erreur de chargement de la musique : " << file << endl;
         return;
     }
@@ -31,10 +31,19 @@ void SoundManager::playButtonSound(const string& buttonName) {
     else if (buttonName == "VOLUMEPLUS" || buttonName == "VOLUMEMOINS") file = "assets/sounds/son_bouton.wav";
     else return;
 
-    if (!buffer.loadFromFile(file)) {  // méthode d'instance
+    if (!buffer.loadFromFile(file)) {
         cout << "Erreur de chargement du son : " << file << endl;
         return;
     }
-    sound.emplace(buffer);  // on crée le Sound avec le buffer
+    sound.emplace(buffer);
+    sound->setVolume(currentVolume);  // applique le volume courant
     sound->play();
+}
+
+
+void SoundManager::setVolume(int volume) {
+    currentVolume = volume * 10;  // on sauvegarde
+    music.setVolume(currentVolume);
+    if (sound.has_value())
+        sound->setVolume(currentVolume);
 }
