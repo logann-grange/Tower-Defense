@@ -44,5 +44,5 @@ public:
     virtual void attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<Projectile>>& listeProjectiles);
     void update(float deltaTime, const std::vector<std::shared_ptr<Monster>> &listeEnemis, std::vector<std::unique_ptr<Projectile>> &listeProjectiles);
     void draw(sf::RenderWindow &window) const;
-    std::string getType() const { return m_type; }
+    std::string getType() const;
 };
