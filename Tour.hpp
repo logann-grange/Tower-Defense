@@ -45,4 +45,5 @@ public:
     void update(float deltaTime, const std::vector<std::shared_ptr<Monster>> &listeEnemis, std::vector<std::unique_ptr<Projectile>> &listeProjectiles);
     void draw(sf::RenderWindow &window) const;
     std::string getType() const;
+    void tenterAmelioration(int& orJoueur);
 };
