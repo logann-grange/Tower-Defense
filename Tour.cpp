@@ -122,3 +122,23 @@ std::string Tour::getType() const
 { 
     return m_type; 
 }
+
+void Tour::tenterAmelioration(int& orJoueur) {
+    // Le coût augmente à chaque niveau (Niveau 1 -> 50 Or, Niveau 2 -> 100 Or...)
+    int coutUpgrade = m_niveau * 50; 
+
+    if (orJoueur >= coutUpgrade) {
+        orJoueur -= coutUpgrade; // On déduit l'or du joueur
+        m_niveau++;              // On monte de niveau
+        
+        // --- BONUS DE STATS CORRIGÉ AVEC TES VARIABLES ---
+        m_atk = static_cast<int>(m_atk * 1.30f);        // +30% d'attaque (m_atk)
+        m_portee += 25;                                 // +25 de portée (m_portee est un int chez toi)
+        m_vitesseAtk *= 0.85f;                          // Réduit le temps d'attente de 15% -> Tire plus vite !
+
+        std::cout << "SUCCESS : Tour amelioree au Niveau " << m_niveau 
+                  << " (Cout : " << coutUpgrade << " Or) !" << std::endl;
+    } else {
+        std::cout << "Pas assez d'or ! Il faut " << coutUpgrade << " Or pour ameliorer." << std::endl;
+    }
+}
