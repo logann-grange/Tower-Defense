@@ -6,6 +6,7 @@
 #include "gestionVague/GestionVague.hpp"
 #include "gestionVague/MonstreInstance.hpp"
 #include "castle/logic/Castle.hpp"
+#include "castle/view/CastleView.hpp"
 
 int main() {
     // 1. FENÊTRE ET DIMENSIONS
@@ -28,6 +29,7 @@ int main() {
     
     Castle castle;
     castle.initialiser(mon_niveau.getPositionObjectif());
+    CastleView castleView;
     // 2. ÉCONOMIE ET STATS DU JOUEUR
     int orJoueur = 100;
 
@@ -36,9 +38,7 @@ int main() {
     std::vector<MonstreInstance> listeMonstres;
     sf::Clock clock;
 
-    // =======================================================
-    // CHANGEMENT ICI : On crée UN SEUL monstre au lieu de 5
-    // =======================================================
+
    GestionVague gestionVague;
     if (!gestionVague.loadFromFile("./data/Vague.json")) {
        std::cerr << "Erreur : Impossible de charger le fichier de vagues !" << std::endl;
@@ -114,9 +114,12 @@ if (gestionVague.vagueTerminee() && listeMonstres.empty()) {  // ← AJOUTER
         // --- C. RENDU GRAPHIQUE ---
         window.clear(sf::Color(40, 44, 52)); 
         window.setView(vueJeu);
-
         // Dessin du niveau LDtk
         mon_niveau.draw(window);
+
+        castleView.update(castle);
+        castleView.draw(window);
+
 
         // Dessin des monstres (il n'y en aura qu'un seul maintenant !)
         for (auto& monstre : listeMonstres) {
