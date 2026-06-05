@@ -5,6 +5,7 @@
 #include <memory>
 #include "Monster.hpp"    
 #include "Projectile.hpp" 
+#include "SFML/Audio.hpp"
 
 /**
  * @class Tour
@@ -31,7 +32,8 @@ protected:
 
     std::shared_ptr<Monster> m_cible{nullptr}; ///< Pointeur intelligent vers le monstre actuellement ciblé
     int m_niveau;                         ///< Niveau actuel de la tour (commence à 1, max 3)
-
+    sf::SoundBuffer m_soundBuffer;        ///< Stocke les données binaires du fichier audio en mémoire vive
+    sf::Sound m_sound;                    ///< Émetteur audio SFML chargé de jouer, stopper ou modifier le volume du son
 public:
     // --- ACCESSEURS / GETTERS (Pour l'interface ou la logique globale) ---
     int getPortee() const { return m_portee; }

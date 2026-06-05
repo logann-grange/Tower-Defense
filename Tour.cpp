@@ -3,12 +3,14 @@
 #include "Projectile.hpp"
 #include <cmath>
 #include <iostream>
+#include "SFML/Audio.hpp"
 
 Tour::Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int niveau, sf::Vector2f pos, const std::string &texturePath)
     : m_id(id), m_atk(atk), m_valeur(valeur), m_type(type), m_portee(portee),
       m_vitesseAtk(vitesseAtk), m_niveau(niveau), m_position(pos), m_valeurEvo(valeur * 0.6f),
       m_tempsDepuisDerniereAtk(0.0f),
-      m_sprite(m_texture) // Correction SFML 3 obligatoire : Lier le sprite à sa texture dans la liste d'initialisation
+      m_sprite(m_texture), // Correction SFML 3 obligatoire : Lier le sprite à sa texture dans la liste d'initialisation
+      m_sound(m_soundBuffer)    // On lie le Sound à son SoundBuffer dès le départ
 {
     if (m_texture.loadFromFile(texturePath))
     {
@@ -29,6 +31,24 @@ Tour::Tour(int id, int atk, int valeur, std::string type, int portee, float vite
     else
     {
         std::cerr << "[ERREUR SFML] Impossible de charger la texture de la tour : " << texturePath << "\n";
+    }
+    // --- CONFIGURATION AUDIO ---
+    // Sélection dynamique du fichier audio en fonction de l'élément de la tour
+    std::string soundPath = "asset/sound/tir_defaut.wav"; // Chemin de secours
+    
+    if (m_type == "Feu") {
+        soundPath = "asset/sound/tir_feu.wav";
+    } else if (m_type == "Glace") {
+        soundPath = "asset/sound/tir_glace.wav";
+    }
+
+    // Chargement du fichier audio dans le buffer de mémoire
+    if (m_soundBuffer.loadFromFile(soundPath)) {
+        // Association obligatoire du Sound avec son Buffer de données
+        m_sound.setBuffer(m_soundBuffer);
+        m_sound.setVolume(50.f); // Réglage du volume initial (0.f à 100.f)
+    } else {
+        std::cerr << "[WARNING IA AUDIO] Impossible de charger le fichier audio : " << soundPath << "\n";
     }
 }
 
@@ -99,6 +119,7 @@ void Tour::draw(sf::RenderWindow &window) const
     window.draw(m_sprite);
 }
 
+
 void Tour::attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<Projectile>>& listeProjectiles)
 {
     if (cible)
@@ -106,7 +127,8 @@ void Tour::attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<
         // IA LOGIQUE : Création d'une instance de Projectile en lui passant le niveau actuel de la tour (m_niveau).
         // Cela permet au projectile de charger dynamiquement la bonne texture évolutive (Feu 1, 2, ou 3).
         listeProjectiles.push_back(std::make_unique<Projectile>(m_position, cible, m_atk, m_type, m_niveau));
-        
+        // 🔥 ACTION AUDIO : Déclenche la lecture du son de tir de manière asynchrone (ne bloque pas le jeu)
+        m_sound.play();
         std::cout << "[TOUR] Tir d'un projectile (" << m_type << ") de niveau " << m_niveau << " !\n";
     }
 }
