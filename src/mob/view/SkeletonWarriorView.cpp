@@ -1,23 +1,11 @@
 #include "SkeletonWarriorView.hpp"
 
 // SFML 3 : On lie obligatoirement m_sprite à m_textureDroite dès le départ
-SkeletonWarriorView::SkeletonWarriorView() : m_sprite(m_textureDroite) {
-    std::cout << "=== SkeletonWarriorView constructeur ===" << std::endl; 
-    
-    // 1. Chargement des textures  C:\Users\bilal\OneDrive\Documents\Projet_tower_defence\asset\Skeleton_Crew\Skeleton-Warrior\Run
-    if (!m_textureDroite.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png")) {
-        std::cerr << "Erreur : Impossible de charger Run-Sheet.png" << std::endl;
-    }
-
-    m_sprite.setTexture(m_textureDroite);
-    m_sprite.setTextureRect(sf::IntRect({0, 0}, {m_frameLargeur, m_frameHauteur}));
-    if (!m_textureGauche.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG_Reverse.png")) {
-        std::cerr << "Erreur : Impossible de charger Run_Reverse.png" << std::endl;
-    }
-
-    if (!m_textureMort.loadFromFile("asset/Skeleton_Crew/Skeleton-Warrior/Death/Death-Sheet.png")) {
-        std::cerr << "Erreur : Impossible de charger Death-Sheet.png" << std::endl;
-    }
+SkeletonWarriorView::SkeletonWarriorView() : m_sprite(ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png")) {
+ 
+    m_pTextureDroite = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png");
+    m_pTextureGauche = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG_Reverse.png");
+    m_pTextureMort  = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Death/Death-Sheet.png");
 
 
     // 2. Découpe initiale de la première case (0, 0)
@@ -65,8 +53,8 @@ void SkeletonWarriorView::update(float deltaTime, const Monster& logique) {
 };
 
         // Sécurité : Premier instant de la mort, on initialise
-        if (&m_sprite.getTexture() != &m_textureMort) {
-        m_sprite.setTexture(m_textureMort);
+        if (&m_sprite.getTexture() != m_pTextureMort) {
+        m_sprite.setTexture(*m_pTextureMort);
         m_sprite.setOrigin({ 64.f / 2.f, 47.f }); // ← adapte l'origine à la nouvelle largeur de frame
         m_frameActuelle = 0;
         m_tempsAnimation = 0.f;
@@ -106,9 +94,9 @@ void SkeletonWarriorView::update(float deltaTime, const Monster& logique) {
     m_barrePV.setSize({40.f * ratioVie, 5.f});
 
     if (logique.getDirection() == Monster::Direction::Gauche) {
-        m_sprite.setTexture(m_textureGauche);
+        m_sprite.setTexture(*m_pTextureGauche);
     } else {
-        m_sprite.setTexture(m_textureDroite);
+        m_sprite.setTexture(*m_pTextureDroite);
     }
    
     int positionXDecoupe = m_frameActuelle * m_frameLargeur;

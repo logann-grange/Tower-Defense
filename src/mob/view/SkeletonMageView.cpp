@@ -1,20 +1,10 @@
 #include "SkeletonMageView.hpp"
 
 // SFML 3 : On lie obligatoirement m_sprite à m_textureDroite dès le départ
-SkeletonMageView::SkeletonMageView() : m_sprite(m_textureDroite) {
-    
-    // 1. Chargement des textures  C:\Users\bilal\OneDrive\Documents\Projet_tower_defence\asset\Skeleton_Crew\Skeleton-Mage\Run
-    if (!m_textureDroite.loadFromFile("asset/Skeleton_Crew/Skeleton-Mage/Run/RunMage.png")) {
-        std::cerr << "Erreur : Impossible de charger Run-Sheet.png" << std::endl;
-    }
-    if (!m_textureGauche.loadFromFile("asset/Skeleton_Crew/Skeleton-Mage/Run/RunMage_Reverse.png")) {
-        std::cerr << "Erreur : Impossible de charger Run_Reverse.png" << std::endl;
-    }
-
-    if (!m_textureMort.loadFromFile("asset/Skeleton_Crew/Skeleton-Mage/Death/Death-Sheet.png")) {
-        std::cerr << "Erreur : Impossible de charger Death-Sheet.png" << std::endl;
-    }
-
+SkeletonMageView::SkeletonMageView() :  m_sprite(ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Run/RuneMage.png")) {
+    m_pTextureDroite = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Run/RunMage.png");
+    m_pTextureGauche = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Run/RunMage_Reverse.png");
+    m_pTextureMort   = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Death/Death-Sheet.png");
     // 2. Découpe initiale de la première case (0, 0)
     m_sprite.setTextureRect(sf::IntRect({0, 0}, {m_frameLargeur, m_frameHauteur}));
     
@@ -41,8 +31,6 @@ void SkeletonMageView::update(float deltaTime, const Monster& logique) {
         // --- 1. CODE DE MORT SÉCURISÉ PAR TABLEAU ---
         
         // On définit manuellement les 8 rectangles exacts des 8 squelettes visibles
-        // Si ton image fait 576 pixels de large avec 8 squelettes, chaque case fait EXACTEMENT 72 pixels de large !
-        // (72 * 8 = 576). C'est pour ça que le calcul avec 64 pixels décalait tout et clignotait !
         static const sf::IntRect rectanglesMort[] = {
     sf::IntRect({0,   0}, {64, 64}),
     sf::IntRect({64,  0}, {64, 64}),
@@ -53,9 +41,9 @@ void SkeletonMageView::update(float deltaTime, const Monster& logique) {
 };
 
         // Sécurité : Premier instant de la mort, on initialise
-        if (&m_sprite.getTexture() != &m_textureMort) {
-        m_sprite.setTexture(m_textureMort);
-        m_sprite.setOrigin({ 64.f / 2.f, 52.f }); // ← adapte l'origine à la nouvelle largeur de frame
+        if (&m_sprite.getTexture() != m_pTextureMort) {
+        m_sprite.setTexture(*m_pTextureMort);
+        m_sprite.setOrigin({ 64.f / 2.f, 52.f }); //
         m_frameActuelle = 0;
         m_tempsAnimation = 0.f;
         m_sprite.setTextureRect(rectanglesMort[0]);
@@ -84,7 +72,6 @@ void SkeletonMageView::update(float deltaTime, const Monster& logique) {
         return; 
     }
 
-    // --- 2. CODE DE COURSE INCHANGÉ (Qui utilise tes cases de 64x64) ---
     sf::Vector2f posMonstre = logique.getPosition();
     m_barreFond.setPosition({posMonstre.x, posMonstre.y - 30.f});
     m_barrePV.setPosition({posMonstre.x, posMonstre.y - 30.f});
@@ -94,9 +81,9 @@ void SkeletonMageView::update(float deltaTime, const Monster& logique) {
     m_barrePV.setSize({40.f * ratioVie, 5.f});
 
     if (logique.getDirection() == Monster::Direction::Gauche) {
-        m_sprite.setTexture(m_textureGauche);
+        m_sprite.setTexture(*m_pTextureGauche);
     } else {
-        m_sprite.setTexture(m_textureDroite);
+        m_sprite.setTexture(*m_pTextureDroite);
     }
 
     if (!logique.estArrive()) {

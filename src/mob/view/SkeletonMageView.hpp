@@ -4,7 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "../MonsterView.hpp"     // On remonte pour chercher l'interface de vue
-#include "../logic/SkeletonMage.hpp" 
+#include "../logic/SkeletonMage.hpp"
+#include "../../ressource/RessourceManager.hpp"
 
 class SkeletonMageView : public MonsterView {
 public:
@@ -18,9 +19,12 @@ public:
 
 private:
     // SFML 3 : Les textures d'abord, le sprite ensuite !
-    sf::Texture m_textureDroite;
-    sf::Texture m_textureGauche;
-    sf::Texture m_textureMort;
+    //sf::Texture m_textureDroite;
+    //sf::Texture m_textureGauche;
+    //sf::Texture m_textureMort;
+    const sf::Texture* m_pTextureDroite = nullptr;
+    const sf::Texture* m_pTextureGauche = nullptr;
+    const sf::Texture* m_pTextureMort   = nullptr;
     sf::Sprite m_sprite; 
     sf::RectangleShape m_barreFond;
     sf::RectangleShape m_barrePV;

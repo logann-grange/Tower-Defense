@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../MonsterView.hpp"     // On remonte pour chercher l'interface de vue
 #include "../logic/SkeletonWarrior.hpp" 
+#include "../../ressource/RessourceManager.hpp"
 
 class SkeletonWarriorView : public MonsterView {
     public:
@@ -19,9 +20,9 @@ class SkeletonWarriorView : public MonsterView {
 
 private:
     // SFML 3 : Les textures d'abord, le sprite ensuite !
-    sf::Texture m_textureDroite;
-    sf::Texture m_textureGauche;
-    sf::Texture m_textureMort;
+    const sf::Texture* m_pTextureDroite = nullptr;
+    const sf::Texture* m_pTextureGauche = nullptr;
+    const sf::Texture* m_pTextureMort   = nullptr;
     sf::Sprite m_sprite; 
     sf::RectangleShape m_barreFond;
     sf::RectangleShape m_barrePV;
