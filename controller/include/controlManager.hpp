@@ -16,7 +16,8 @@ public:
         QUITTER,
         RETOUR,
         VOLUMEPLUS,
-        VOLUMEMOINS
+        VOLUMEMOINS,
+        ACHETER_TOUR
     };
 
     explicit ControlManager(std::vector<Bouton>& initialButtons);

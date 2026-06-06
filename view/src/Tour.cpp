@@ -9,26 +9,66 @@ Tour::Tour() : m_id(0), m_atk(0), m_valeur(0), m_type(""), m_bonus(""),
 Tour::Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int niveau, sf::Vector2f pos, const std::string &texturePath)
     : m_id(id), m_atk(atk), m_valeur(valeur), m_type(type), m_portee(portee),
       m_vitesseAtk(vitesseAtk), m_niveau(niveau), m_position(pos), m_valeurEvo(valeur * 0.6f),
-      m_tempsDepuisDerniereAtk(0.0f),
-      m_sprite(m_texture) 
+      m_tempsDepuisDerniereAtk(0.0f)
 {
     if (m_texture.loadFromFile(texturePath))
     {
-        m_sprite->setTexture(m_texture, true); 
+        m_sprite.emplace(m_texture);
         
         auto textureSize = m_texture.getSize();
         m_sprite->setTextureRect(sf::IntRect({0, 0}, {static_cast<int>(textureSize.x), static_cast<int>(textureSize.y)}));
 
         auto bounds = m_sprite->getLocalBounds();
         m_sprite->setOrigin({bounds.size.x / 2.f, bounds.size.y / 2.f});
-
         m_sprite->setScale({0.08f, 0.08f});
         m_sprite->setPosition(m_position);
     }
     else
     {
-        std::cout << "[ERREUR SFML] Impossible de charger la texture de la tour : " << texturePath << "\n";
+        std::cout << "[ERREUR] Impossible de charger : " << texturePath << "\n";
     }
+}
+
+Tour::Tour(const Tour& other)
+    : m_id(other.m_id), m_atk(other.m_atk), m_valeur(other.m_valeur),
+      m_type(other.m_type), m_bonus(other.m_bonus), m_valeurEvo(other.m_valeurEvo),
+      m_position(other.m_position), m_texture(other.m_texture),
+      m_portee(other.m_portee), m_vitesseAtk(other.m_vitesseAtk),
+      m_tempsDepuisDerniereAtk(other.m_tempsDepuisDerniereAtk), m_niveau(other.m_niveau)
+{
+    if (other.m_sprite.has_value()) {
+        m_sprite.emplace(m_texture);  // rebind sur la nouvelle texture
+        // recopie toutes les transformations
+        m_sprite->setTextureRect(other.m_sprite->getTextureRect());
+        m_sprite->setOrigin(other.m_sprite->getOrigin());
+        m_sprite->setScale(other.m_sprite->getScale());
+        m_sprite->setPosition(other.m_sprite->getPosition());
+    }
+}
+
+Tour& Tour::operator=(const Tour& other) {
+    if (this == &other) return *this;
+    m_id = other.m_id;
+    m_atk = other.m_atk;
+    m_valeur = other.m_valeur;
+    m_type = other.m_type;
+    m_bonus = other.m_bonus;
+    m_valeurEvo = other.m_valeurEvo;
+    m_position = other.m_position;
+    m_texture = other.m_texture;
+    m_portee = other.m_portee;
+    m_vitesseAtk = other.m_vitesseAtk;
+    m_tempsDepuisDerniereAtk = other.m_tempsDepuisDerniereAtk;
+    m_niveau = other.m_niveau;
+
+    if (other.m_sprite.has_value()) {
+        m_sprite.emplace(m_texture);
+        m_sprite->setTextureRect(other.m_sprite->getTextureRect());
+        m_sprite->setOrigin(other.m_sprite->getOrigin());
+        m_sprite->setScale(other.m_sprite->getScale());
+        m_sprite->setPosition(other.m_sprite->getPosition());
+    }
+    return *this;
 }
 
 // void Tour::update(float deltaTime, const std::vector<std::shared_ptr<Monster>> &listeEnemis, std::vector<std::unique_ptr<Projectile>> &listeProjectiles)
@@ -89,7 +129,8 @@ Tour::Tour(int id, int atk, int valeur, std::string type, int portee, float vite
 
 void Tour::draw(sf::RenderWindow &window) const
 {
-    window.draw(*m_sprite);
+    if (m_sprite.has_value())
+        window.draw(*m_sprite);
 }
 
 // void Tour::attaquer(std::shared_ptr<Monster> cible, std::vector<std::unique_ptr<Projectile>>& listeProjectiles)

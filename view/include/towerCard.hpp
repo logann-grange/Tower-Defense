@@ -18,12 +18,14 @@ class TowerCard {
         optional<Sprite> typeSprite;
         Vector2f coord;
         unique_ptr<Text> label;   
-        unique_ptr<Text> prix;
+        unique_ptr<Text> price;
         unique_ptr<Font> font;
 
         TowerCard();
-        TowerCard(Tour tower, Vector2f coord);
+        //TowerCard(Tour tower, Vector2f coord);
+        TowerCard(const Tour& tower, Vector2f coord);  
 
         void display(RenderWindow &window);
+        bool isClicked(sf::RenderWindow& window);
 
 };

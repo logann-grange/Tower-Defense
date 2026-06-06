@@ -71,6 +71,19 @@ int main() {
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             ctrl.handleEvent(window, *event);
+
+        // clic sur une towerCard
+            if (const auto* mouseEvent = event->getIf<sf::Event::MouseButtonPressed>()) {
+                if (mouseEvent->button == sf::Mouse::Button::Left) {
+                    for (auto& card : store.towerCardList) {
+                        if (card->isClicked(window)) {
+                            store.selectedTower = card->tower;
+                            cout << "Tour sélectionnée : " << card->tower.m_type << endl;
+                        }
+                    }
+                }
+            }
+
             if (event->is<sf::Event::Closed>())
                 window.close();
         }

@@ -14,7 +14,11 @@ class Store {
         Texture bgTexture;
         optional<Sprite> bgSprite;
         vector<Tour> towerList; // à supprimer ??
-        vector<TowerCard> towerCardList; // fiche d'achat des tours (prix, nom, sprite...)
+        vector<unique_ptr<TowerCard>> towerCardList;
+        unique_ptr<Text> goldLabel;
+        unique_ptr<Font> font;
+        Texture goldTexture;
+        optional<Sprite> goldSprite;
         Tour selectedTower;
         int gold;
 

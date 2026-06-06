@@ -40,6 +40,8 @@ public:
 
     Tour();
     Tour(int id, int atk, int valeur, std::string type, int portee, float vitesseAtk, int niveau, sf::Vector2f pos, const std::string &texturePath);
+    Tour(const Tour& other);             // constructeur de copie
+    Tour& operator=(const Tour& other);  // opérateur d'assignation
     virtual ~Tour() = default;
     
     void upgrade();
