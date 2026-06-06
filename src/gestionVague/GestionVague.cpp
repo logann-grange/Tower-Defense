@@ -1,18 +1,26 @@
 #include "GestionVague.hpp"
-
+ 
 using json = nlohmann::json;
-
+ 
+GestionVague::GestionVague() {
+    // Enregistrement des factories — pour ajouter un monstre,
+    // il suffit d'ajouter une ligne ici et créer sa factory dans MonstreFactory.hpp
+    m_factories["Skeleton"]        = std::make_unique<SkeletonFactory>();
+    m_factories["SkeletonWarrior"] = std::make_unique<SkeletonWarriorFactory>();
+    m_factories["SkeletonMage"]    = std::make_unique<SkeletonMageFactory>();
+}
+ 
 bool GestionVague::loadFromFile(const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
         std::cerr << "Erreur : Impossible d'ouvrir le fichier " << path << std::endl;
         return false;
     }
-
+ 
     json data;
     file >> data;
-     m_vagues.clear();
-
+    m_vagues.clear();
+ 
     std::vector<std::pair<int, json>> vaguesTriees;
     for (auto& [key, val] : data.items()) {
         vaguesTriees.push_back({ val["id"].get<int>(), val });
@@ -32,85 +40,59 @@ bool GestionVague::loadFromFile(const std::string& path) {
         m_vagues.push_back(v);
     }
  
-    std::cout << "WaveManager : " << m_vagues.size() << " vagues chargees." << std::endl;
+    std::cout << "GestionVague : " << m_vagues.size() << " vagues chargees." << std::endl;
     return true;
 }
-
+ 
 void GestionVague::update(float deltaTime,
-                         std::vector<MonstreInstance>& listeMonstres,
-                         const std::vector<sf::Vector2i>& chemin) {
+                          std::vector<MonstreInstance>& listeMonstres,
+                          const std::vector<sf::Vector2i>& chemin) {
     if (toutesVaguesTerminees()) return;
  
     const Vague& vague = m_vagues[m_vagueActuelle];
- 
     m_tempsEcoule += deltaTime;
  
-    // Spawne tous les monstres dont le spawnTime est dépassé
     while (m_indexProchainMonstre < static_cast<int>(vague.monstres.size())) {
         const MonstreASpawner& suivant = vague.monstres[m_indexProchainMonstre];
  
         if (m_tempsEcoule >= suivant.spawnTime) {
-            MonstreInstance instance;
-            instance.logique   = creerLogique(suivant.type);
-            instance.graphique = creerGraphique(suivant.type);
- 
-            if (instance.logique && instance.graphique) {
+            auto it = m_factories.find(suivant.type);
+            if (it != m_factories.end()) {
+                MonstreInstance instance;
+                instance.logique   = it->second->creerLogique();
+                instance.graphique = it->second->creerGraphique();
                 instance.logique->spawn(chemin);
                 listeMonstres.push_back(std::move(instance));
                 std::cout << "Spawn : " << suivant.type
                           << " (t=" << m_tempsEcoule << "s)" << std::endl;
+            } else {
+                std::cerr << "GestionVague : type inconnu -> " << suivant.type << std::endl;
             }
             m_indexProchainMonstre++;
         } else {
-            break; // Le prochain n'est pas encore prêt
+            break;
         }
     }
 }
-
+ 
 bool GestionVague::vagueTerminee() const {
     if (toutesVaguesTerminees()) return true;
-    const Vague& vague = m_vagues[m_vagueActuelle];
-    return m_indexProchainMonstre >= static_cast<int>(vague.monstres.size());
+    return m_indexProchainMonstre >= static_cast<int>(m_vagues[m_vagueActuelle].monstres.size());
 }
-
+ 
 bool GestionVague::toutesVaguesTerminees() const {
     return m_vagueActuelle >= static_cast<int>(m_vagues.size());
 }
-
+ 
 void GestionVague::passerVagueSuivante() {
     if (!vagueTerminee()) {
-        std::cerr << "Erreur : Impossible de passer à la vague suivante, la vague actuelle n'est pas terminée." << std::endl;
+        std::cerr << "Erreur : La vague actuelle n'est pas terminee." << std::endl;
         return;
     }
     if (toutesVaguesTerminees()) return;
     m_vagueActuelle++;
     m_indexProchainMonstre = 0;
     m_tempsEcoule = 0.f;
+    std::cout << "=== Vague " << m_vagueActuelle + 1 << " ===" << std::endl;
 }
-
-
-std::unique_ptr<Monster> GestionVague::creerLogique(const std::string& type) {
-    if (type == "Skeleton") {
-        return std::make_unique<Skeleton>();
-    } else if (type == "SkeletonWarrior") {
-        return std::make_unique<SkeletonWarrior>();
-    } else if (type == "SkeletonMage") {
-        return std::make_unique<SkeletonMage>();
-    } else {
-        std::cerr << "Erreur : Type de monstre inconnu '" << type << "'" << std::endl;
-        return nullptr;
-    }
-}
-
-std::unique_ptr<MonsterView> GestionVague::creerGraphique(const std::string& type) {
-    if (type == "Skeleton") {
-        return std::make_unique<SkeletonView>();
-    } else if (type == "SkeletonWarrior") {
-        return std::make_unique<SkeletonWarriorView>();
-    } else if (type == "SkeletonMage") {
-        return std::make_unique<SkeletonMageView>();
-    } else {
-        std::cerr << "Erreur : Type de monstre inconnu '" << type << "'" << std::endl;
-        return nullptr;
-    }
-}
+ 

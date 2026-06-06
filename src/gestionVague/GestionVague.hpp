@@ -7,14 +7,10 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <SFML/System/Vector2.hpp>
 #include "MonstreInstance.hpp"
-#include "../mob/logic/Skeleton.hpp"
-#include "../mob/logic/SkeletonWarrior.hpp"
-#include "../mob/logic/SkeletonMage.hpp"
-#include "../mob/view/SkeletonView.hpp"
-#include "../mob/view/SkeletonWarriorView.hpp"
-#include "../mob/view/SkeletonMageView.hpp"
-
+#include <map>
+#include "MonsterFactory.hpp"
  
 struct MonstreASpawner {
     std::string type;
@@ -28,6 +24,7 @@ struct Vague {
  
 class GestionVague {
 public:
+    GestionVague();
     bool loadFromFile(const std::string& path);
  
     void update(float deltaTime,
@@ -42,8 +39,8 @@ public:
     void passerVagueSuivante();       // à appeler quand listeMonstres est vide ET vagueTerminee()
  
 private:
-    std::unique_ptr<Monster>     creerLogique(const std::string& type);
-    std::unique_ptr<MonsterView> creerGraphique(const std::string& type);
+    std::map<std::string, std::unique_ptr<MonstreFactory>> m_factories;
+ 
  
     std::vector<Vague> m_vagues;
     int   m_vagueActuelle       = 0;
