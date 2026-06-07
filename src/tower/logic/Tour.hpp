@@ -49,6 +49,9 @@ protected:
     float        m_tempsDepuisDerniereAtk = 0.f;
 
     std::shared_ptr<Monster> m_cible = nullptr;
+    bool m_aTire = false;
+
+    bool aEteTiree();
 
 private:
     void attaquer(std::shared_ptr<Monster> cible,

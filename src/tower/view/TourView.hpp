@@ -10,6 +10,7 @@ public:
     void update(const Tour& logique);
     void draw(sf::RenderWindow& window) const;
     sf::Sprite getSpriteCopy() const;
+    void playSound();
 
 private:
     sf::Texture  m_texture;
