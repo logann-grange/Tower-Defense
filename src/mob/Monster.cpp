@@ -48,6 +48,7 @@ void Monster::subirDegats(float montant, const std::string& typeDegat) {
     if (typeDegat == m_faiblesse) {
         degatsFinaux = montant * 2.f; // Double dégâts !
         std::cout << "Coup critique ! Faiblesse touchee !" << std::endl;
+         std::cout << "subirDegats - type: '" << typeDegat << "' faiblesse: '" << m_faiblesse << "'" << std::endl;
     }
 
     m_pvActuels -= degatsFinaux;

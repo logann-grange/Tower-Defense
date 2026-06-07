@@ -177,5 +177,11 @@ sf::Vector2i Map::getPositionObjectif() const {
     return m_positionObjectif;
 }
 
+int Map::getGridValue(int x, int y) const {
+    if (x >= 0 && x < m_width && y >= 0 && y < m_height)
+        return m_grid[y][x];
+    return -1;
+}
+
 int Map::getWidth() const { return m_width; }
 int Map::getHeight() const { return m_height; }

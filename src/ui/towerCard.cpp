@@ -1,13 +1,21 @@
 ﻿#include "../ui/towerCard.hpp"
 
-TowerCard::TowerCard(const Tour& tower, Vector2f coord) {
-    //modif des coord de la tour
+TowerCard::TowerCard(const Tour& tower, const std::string& texturePath, Vector2f coord)
+{
     this->tower = tower;
-    if (this->tower.m_sprite.has_value()) {
-        this->tower.m_sprite->setPosition({coord.x + 50.f, coord.y + 65.f});
+
+    // charger une texture persistante pour la carte de tour
+    if (!towerTexture.loadFromFile(texturePath)) {
+        cout << "ERREUR: texture de tour introuvable ! " << texturePath << std::endl;
     }
-    cout << "TowerCard créée pour : " << tower.m_type << endl;
-    cout << "Sprite valide : " << tower.m_sprite.has_value() << endl;
+    towerSprite.emplace(towerTexture);
+    towerSprite->setTexture(towerTexture, true);
+    towerSprite->setPosition({coord.x + 50.f, coord.y + 65.f});
+    towerSprite->setScale({100.f/bgTexture.getSize().x, 125.f/bgTexture.getSize().y});
+
+
+    cout << "TowerCard créée pour : " << tower.getType() << endl;
+    cout << "Sprite valide : " << (towerTexture.getSize().x != 0) << endl;
     // chargement des texture du background
     if (!bgTexture.loadFromFile("assets/UI/TowerCard.png")) {
         cout << "ERREUR: texture du fond du store introuvable !" << std::endl;
@@ -17,7 +25,7 @@ TowerCard::TowerCard(const Tour& tower, Vector2f coord) {
     bgSprite->setScale({100.f/bgTexture.getSize().x, 125.f/bgTexture.getSize().y});
 
     //chargement des texture de l'indicateur de type
-    if (!typeTexture.loadFromFile("assets/UI/icone tour/" + tower.m_type + ".png")) {
+    if (!typeTexture.loadFromFile("assets/UI/icone tour/" + tower.getType() + ".png")) {
         cout << "ERREUR: texture du l'élément introuvable !" << std::endl;
     }
     typeSprite.emplace(typeTexture);
@@ -26,10 +34,12 @@ TowerCard::TowerCard(const Tour& tower, Vector2f coord) {
 
     //chargement de la police
     font = make_unique<Font>();
-    font->openFromFile("assets/fonts/PressStart2P-Regular.ttf");
+    if (!font->openFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
+        std::cerr << "ERREUR: police introuvable !" << std::endl;
+    }
 
     // chargement du label
-    label = make_unique<Text>(*font, "Tour de " + tower.m_type, 6);
+    label = make_unique<Text>(*font, "Tour de " + tower.getType(), 6);
     label->setFillColor(sf::Color(0, 0, 0));
     label->setPosition({coord.x+20, coord.y+15});
     // a enlever ??
@@ -43,7 +53,7 @@ void TowerCard::display(RenderWindow &window) {
     if (bgSprite) window.draw(*bgSprite);
     if (typeSprite) window.draw(*typeSprite);
     if (label) window.draw(*label);
-    if (tower.m_sprite) window.draw(*tower.m_sprite);
+    if (towerSprite) window.draw(*towerSprite);
 }
 
 bool TowerCard::isClicked(sf::RenderWindow& window) {

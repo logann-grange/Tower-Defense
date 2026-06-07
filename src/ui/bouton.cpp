@@ -4,11 +4,15 @@ Bouton::Bouton(Vector2f coord, Vector2f size, string image, string text, bool is
     : coord(coord), size(size), image(image), text(text), box(size), isLabel(isLabel)
 {
     box.setPosition(coord);
-    texture.loadFromFile(image);
+    if (!texture.loadFromFile(image)) {
+        std::cerr << "ERREUR: impossible de charger la texture: " << image << std::endl;
+    }
 
     // unique_ptr : adresse fixe même si le vecteur se redimensionne
     font = make_unique<Font>();
-    font->openFromFile("assets/fonts/PressStart2P-Regular.ttf");
+    if (!font->openFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
+        std::cerr << "ERREUR: police introuvable !" << std::endl;
+    }
 
     label = make_unique<Text>(*font, text, 24);
     label->setFillColor(Color(255, 174, 0));
@@ -20,11 +24,12 @@ Bouton::Bouton(Vector2f coord, Vector2f size, string image, string text, bool is
 
 bool Bouton::isHover(RenderWindow &window) {
     Vector2i mousePos = Mouse::getPosition(window);
+    Vector2f worldPos = window.mapPixelToCoords(mousePos);
     Sprite sprite(texture);
     sprite.setPosition(coord);
     Vector2u texSize = texture.getSize();
     sprite.setScale({size.x / texSize.x, size.y / texSize.y});
-    return sprite.getGlobalBounds().contains(Vector2f(mousePos));
+    return sprite.getGlobalBounds().contains(worldPos);
 }
 
 void Bouton::display(RenderWindow &window) {

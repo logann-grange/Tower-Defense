@@ -2,7 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "../ui/bouton.hpp"
-#include "../ui/Tour.hpp"
+#include "../tower/logic/Tour.hpp"
+#include "../tower/logic/Tour.hpp"
+#include "../tower/view/TourView.hpp"
 #include "../ui/towerCard.hpp"
 
 using namespace std;
@@ -23,6 +25,10 @@ class Store {
         int gold;
 
         Store(int gold);
+        void updateGold(int newGold) {
+        gold = newGold;
+        goldLabel->setString(std::to_string(gold));
+}
 
         void display(RenderWindow &window);
 

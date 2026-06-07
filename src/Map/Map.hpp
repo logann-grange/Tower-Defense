@@ -24,6 +24,7 @@ public:
     sf::Vector2i trouverPointDepartDepuisEntite() const;
     sf::Vector2i getPositionObjectif() const;
 
+    int getGridValue(int x, int y) const;
 
     int getWidth() const ;
     int getHeight() const;
@@ -44,7 +45,7 @@ private:
 
     // Constantes de l'IntGrid synchronisées avec ton fichier .ldtk
     inline static const int VAL_VIDE = 0;
-    inline static const int VAL_TOURS = 1;     // Zone constructible pour les tours
+    inline static const int VAL_TOURS = 3;     // Zone constructible pour les tours
     inline static const int VAL_CHEMIN = 2;    // "zone_de_chemin" dans ton LDtk
 
     sf::Vector2i m_positionObjectif; // Contiendra la position de la ligne d'arrivée (objectif final des monstres)

@@ -16,10 +16,10 @@ Param::Param(int sound) {
     buttonList.emplace_back(Vector2f(1065, 550),  Vector2f(50, 50), "assets/UI/icone bouton/icone_moins.png", "VOLUMEMOINS", false);
     buttonList.emplace_back(Vector2f(1150, 300),  Vector2f(50, 50), "assets/UI/icone bouton/icone_close.png", "RETOUR", false);
     buttonList.emplace_back(Vector2f((1920-400)/2, 750),  Vector2f(400,100), "assets/UI/icone bouton/bouton_bleu.png",  "CREDITS", true);
-
-    //chargement de la police
     font = make_unique<Font>();
-    font->openFromFile("assets/fonts/PressStart2P-Regular.ttf");
+    if (!font->openFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
+        std::cerr << "ERREUR: police introuvable !" << std::endl;
+    }
 
     //chargement des Labels
     soundLabel = make_unique<Text>(*font, "Volume du son", 24);

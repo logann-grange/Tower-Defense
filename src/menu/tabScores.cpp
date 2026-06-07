@@ -15,7 +15,9 @@ tabScores::tabScores() {
 
     // chargement de la police
     font = make_unique<Font>();
-    font->openFromFile("assets/fonts/PressStart2P-Regular.ttf");
+    if (!font->openFromFile("assets/fonts/PressStart2P-Regular.ttf")) {
+        std::cerr << "ERREUR: police introuvable !" << std::endl;
+    }
 
     // initialisation du titre
     title = make_unique<Text>(*font, "SCORES", 32);

@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <optional>
+#include <iostream>
 
 using namespace std;
 using namespace sf;
