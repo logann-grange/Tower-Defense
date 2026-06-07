@@ -1,11 +1,11 @@
-#include "SkeletonWarriorView.hpp"
+﻿#include "SkeletonWarriorView.hpp"
 
 // SFML 3 : On lie obligatoirement m_sprite à m_textureDroite dès le départ
-SkeletonWarriorView::SkeletonWarriorView() : m_sprite(ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png")) {
+SkeletonWarriorView::SkeletonWarriorView() : m_sprite(ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png")) {
  
-    m_pTextureDroite = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png");
-    m_pTextureGauche = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Run/RunG_Reverse.png");
-    m_pTextureMort  = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Warrior/Death/Death-Sheet.png");
+    m_pTextureDroite = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Warrior/Run/RunG.png");
+    m_pTextureGauche = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Warrior/Run/RunG_Reverse.png");
+    m_pTextureMort  = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Warrior/Death/Death-Sheet.png");
 
 
     // 2. Découpe initiale de la première case (0, 0)

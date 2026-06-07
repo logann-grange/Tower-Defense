@@ -1,10 +1,10 @@
-#include "SkeletonMageView.hpp"
+﻿#include "SkeletonMageView.hpp"
 
 // SFML 3 : On lie obligatoirement m_sprite à m_textureDroite dès le départ
-SkeletonMageView::SkeletonMageView() :  m_sprite(ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Run/RuneMage.png")) {
-    m_pTextureDroite = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Run/RunMage.png");
-    m_pTextureGauche = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Run/RunMage_Reverse.png");
-    m_pTextureMort   = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Mage/Death/Death-Sheet.png");
+SkeletonMageView::SkeletonMageView() :  m_sprite(ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Mage/Run/RunMage.png")) {
+    m_pTextureDroite = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Mage/Run/RunMage.png");
+    m_pTextureGauche = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Mage/Run/RunMage_Reverse.png");
+    m_pTextureMort   = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Mage/Death/Death-Sheet.png");
     // 2. Découpe initiale de la première case (0, 0)
     m_sprite.setTextureRect(sf::IntRect({0, 0}, {m_frameLargeur, m_frameHauteur}));
     

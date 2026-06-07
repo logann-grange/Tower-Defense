@@ -1,11 +1,11 @@
-#include "SkeletonView.hpp"
+﻿#include "SkeletonView.hpp"
 
 // SFML 3 : On lie obligatoirement m_sprite à m_textureDroite dès le départ
-SkeletonView::SkeletonView() : m_sprite(ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Base/Run/Run2.png")) {
+SkeletonView::SkeletonView() : m_sprite(ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Base/Run/Run2.png")) {
     
-   m_pTextureDroite = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Base/Run/Run2.png");
-    m_pTextureGauche = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Base/Run/Run_Reverse.png");
-    m_pTextureMort   = &ResourceManager::getInstance().getTexture("asset/Skeleton_Crew/Skeleton-Base/Death/Death.png");
+    m_pTextureDroite = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Base/Run/Run2.png");
+     m_pTextureGauche = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Base/Run/Run_Reverse.png");
+     m_pTextureMort   = &ResourceManager::getInstance().getTexture("assets/Skeleton_Crew/Skeleton_Crew/Skeleton-Base/Death/Death.png");
 
     // 2. Découpe initiale de la première case (0, 0)
     m_sprite.setTextureRect(sf::IntRect({0, 0}, {m_frameLargeur, m_frameHauteur}));
