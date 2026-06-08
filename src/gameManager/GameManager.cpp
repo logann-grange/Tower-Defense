@@ -21,6 +21,11 @@ void GameManager::placerTour(const Tour& tour, const std::string& texturePath) {
         static_cast<int>(tour.getPosition().x / 16),
         static_cast<int>(tour.getPosition().y / 16)
     };
+std::cout << "Position pixels : (" << tour.getPosition().x << ", " << tour.getPosition().y << ")" << std::endl;
+std::cout << "Case grille : (" << caseGrille.x << ", " << caseGrille.y << ")" << std::endl;
+std::cout << "isTowerZone : " << m_map.isTowerZone(caseGrille.x, caseGrille.y) << std::endl;
+std::cout << "Valeur grille : " << m_map.getGridValue(caseGrille.x, caseGrille.y) << std::endl;
+std::cout << "Map taille : " << m_map.getWidth() << " x " << m_map.getHeight() << std::endl;
     if (!m_map.isTowerZone(caseGrille.x, caseGrille.y)) {
         std::cout << "Impossible de placer une tour ici !" << std::endl;
         return;

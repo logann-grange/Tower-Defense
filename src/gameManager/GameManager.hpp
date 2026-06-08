@@ -16,12 +16,9 @@
 #include "../tower/view/ProjectileView.hpp"
 #include "../tower/logic/Tour.hpp"
 #include "../tower/view/TourView.hpp"
-<<<<<<< HEAD
 #include "../tower/logic/ProjectileFeu.hpp"
 #include "../tower/logic/ProjectileGlace.hpp"
-=======
 #include "../ui/soundManager.hpp"
->>>>>>> 4d13a2844cfc7739889842da0e484c18f34ef085
  
 
 
@@ -63,13 +60,13 @@ private:
     void mettreAJourMonstres(float deltaTime);
     void mettreAJourTours(float deltaTime);
     void nettoyerMonstres();
+
+    SoundManager&                  m_soundManager;
  
     Map&                         m_map;
     std::vector<sf::Vector2i>    m_chemin;
     std::vector<MonstreInstance> m_listeMonstres;
     std::list<TourInstance>    m_listeTours;
-
-    SoundManager& m_soundManager;
     
     GestionVague m_gestionVague;
     Castle       m_castle;
