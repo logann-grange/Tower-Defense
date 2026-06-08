@@ -163,7 +163,7 @@ int main() {
         if (state == GameState::InGame) {
             if (!gameManager.isGameOver()) {
                 gameManager.update(deltaTime);
-                store.gold = gameManager.getOr();
+                store.updateGold(gameManager.getOr());
             }
             if (gameManager.isGameOver()) {
                 state = GameState::GameOver;
