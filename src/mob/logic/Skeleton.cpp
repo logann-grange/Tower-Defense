@@ -7,7 +7,7 @@ Skeleton::Skeleton() {
     m_pvActuels = m_pvMax;
     m_degatsBase = 1;          // Si il passe, il inflige 1 dégât au joueur
     m_orRecompense = 30;       // Donne 30 pièces d'or à sa mort
-    m_faiblesse = "Fleu"; // Il explose facilement (sensible aux tours de type feu/bombe)
+    m_faiblesse = "Feu"; // Il explose facilement (sensible aux tours de type feu/bombe)
 
     m_arrive = false;
     m_directionCourante = Direction::Droite;

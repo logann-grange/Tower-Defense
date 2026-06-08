@@ -67,12 +67,23 @@ void Tour::update(float deltaTime,
 void Tour::attaquer(std::shared_ptr<Monster> cible,
                     std::vector<std::unique_ptr<Projectile>>& listeProjectiles)                  
 {
-    if (cible) {
+    if (!cible) return;
+
+    if (m_type == "Feu") {
+        listeProjectiles.push_back(
+            std::make_unique<ProjectileFeu>(m_position, cible, m_atk, m_niveau));
+        std::cout << "[DEBUG] Projectile FEU cree" << std::endl;
+    } 
+    else if (m_type == "Glace") {
+        listeProjectiles.push_back(
+            std::make_unique<ProjectileGlace>(m_position, cible, m_atk, m_niveau));
+        std::cout << "[DEBUG] Projectile GLACE cree" << std::endl;
+    }
+    else {
+        // Projectile générique par défaut si le type n'est ni Feu ni Glace
         listeProjectiles.push_back(
             std::make_unique<Projectile>(m_position, cible, m_atk, m_type, m_niveau));
-        std::cout << "[TOUR] Tir (" << m_type << ") niveau " << m_niveau << "\n";
-        listeProjectiles.push_back(
-    std::make_unique<Projectile>(m_position, cible, m_atk, m_type, m_niveau));
+        std::cout << "[DEBUG] Projectile PAR DEFAUT cree" << std::endl;
     }
 }
 

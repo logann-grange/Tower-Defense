@@ -16,6 +16,8 @@
 #include "../tower/view/ProjectileView.hpp"
 #include "../tower/logic/Tour.hpp"
 #include "../tower/view/TourView.hpp"
+#include "../tower/logic/ProjectileFeu.hpp"
+#include "../tower/logic/ProjectileGlace.hpp"
  
 
 
@@ -51,7 +53,8 @@ public:
     void setOr(int or_)      { m_orJoueur = or_; }
     bool isGameOver()  const { return m_castle.isDestroyed(); }
     bool isVictoire()  const { return m_gestionVague.toutesVaguesTerminees() && m_listeMonstres.empty(); }
- 
+    
+    void reinitialiser(const std::string& cheminVagues);
 private:
     void mettreAJourMonstres(float deltaTime);
     void mettreAJourTours(float deltaTime);

@@ -20,11 +20,6 @@ void GameManager::placerTour(const Tour& tour, const std::string& texturePath) {
         static_cast<int>(tour.getPosition().x / 16),
         static_cast<int>(tour.getPosition().y / 16)
     };
-std::cout << "Position pixels : (" << tour.getPosition().x << ", " << tour.getPosition().y << ")" << std::endl;
-std::cout << "Case grille : (" << caseGrille.x << ", " << caseGrille.y << ")" << std::endl;
-std::cout << "isTowerZone : " << m_map.isTowerZone(caseGrille.x, caseGrille.y) << std::endl;
-std::cout << "Valeur grille : " << m_map.getGridValue(caseGrille.x, caseGrille.y) << std::endl;
-std::cout << "Map taille : " << m_map.getWidth() << " x " << m_map.getHeight() << std::endl;
     if (!m_map.isTowerZone(caseGrille.x, caseGrille.y)) {
         std::cout << "Impossible de placer une tour ici !" << std::endl;
         return;
@@ -120,6 +115,16 @@ void GameManager::nettoyerMonstres() {
             ++it;
         }
     }
+}
+
+void GameManager::reinitialiser(const std::string& cheminVagues) {
+    m_listeMonstres.clear();
+    m_listeTours.clear();
+    m_listeProjectiles.clear();
+    m_orJoueur = 100;
+    m_gestionVague = GestionVague();
+    m_gestionVague.loadFromFile(cheminVagues);
+    m_castle.initialiser(m_map.getPositionObjectif());
 }
 
 void GameManager::draw(sf::RenderWindow& window) {

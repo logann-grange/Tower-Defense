@@ -7,7 +7,7 @@ SkeletonWarrior::SkeletonWarrior() {
     m_pvActuels = m_pvMax;
     m_degatsBase = 2;          // Inflige plus de dégâts au joueur
     m_orRecompense = 80;       // Donne plus d'or à sa mort
-    m_faiblesse = "Glace"; // Il explose facilement (sensible aux tours de type feu/bombe)
+    m_faiblesse = "Glace"; // 
 
     m_arrive = false;
     m_directionCourante = Direction::Droite;
