@@ -31,7 +31,7 @@ int main() {
     std::cout << "4 - SoundManager..." << std::endl;
     SoundManager snd;
     std::cout << "5 - Store..." << std::endl;
-    Store store(1000);
+    Store store(100);
     std::cout << "6 - ControlManager..." << std::endl;
     ControlManager ctrl(menu.buttonList);
 
@@ -47,7 +47,7 @@ int main() {
     }
 
     std::cout << "9 - GameManager..." << std::endl;
-    GameManager gameManager(mon_niveau);
+    GameManager gameManager(mon_niveau, snd);
     if (!gameManager.initialiser("./data/Vague.json")) {
         return -1;
     }
@@ -59,7 +59,7 @@ int main() {
     ctrl.bindAction(ControlManager::Action::JOUER, [&]() {
         snd.playButtonSound("JOUER");
         state = GameState::InGame;
-        // snd.playMusic("game");
+        snd.playMusic("game");
     });
     std::cout << "12 - bindAction SCORES..." << std::endl;
     ctrl.bindAction(ControlManager::Action::SCORES, [&]() {
@@ -147,7 +147,7 @@ int main() {
                                 );
 
                                 std::string texturePath = "assets/towers/fire/fire_tower_base.png";
-                                if (store.selectedTower.getType() == "glace")
+                                if (store.selectedTower.getType() == "Glace")
                                     texturePath = "assets/towers/ice/ice_tower_base.png";
 
                                 gameManager.placerTour(tourAPoser, texturePath);

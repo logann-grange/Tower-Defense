@@ -10,8 +10,8 @@ Store::Store(int gold) {
     bgSprite->setScale({200.f/bgTexture.getSize().x, 1156.f/bgTexture.getSize().y});
 
     //chargement des cartes
-    Tour tourFeu(1, 15, 60, "feu", 8, 1.5f, 1, {0,0});
-    Tour tourGlace(1, 10, 70, "glace", 6, 2.0f, 1, {0,0});
+    Tour tourFeu(1, 15, 60, "Feu", 8, 1.5f, 1, {0,0});
+    Tour tourGlace(1, 10, 70, "Glace", 6, 2.0f, 1, {0,0});
 
     // create views for the tower cards
 

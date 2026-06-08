@@ -1,6 +1,7 @@
 #include "GameManager.hpp"
 
-GameManager::GameManager(Map& map) : m_map(map) {
+GameManager::GameManager(Map& map, SoundManager& soundManager)
+    : m_map(map), m_soundManager(soundManager) {
     sf::Vector2i caseDepart = m_map.trouverPointDepartDepuisEntite();
     m_chemin = m_map.genererChemin(caseDepart);
     m_castle.initialiser(m_map.getPositionObjectif());
@@ -92,6 +93,9 @@ void GameManager::mettreAJourTours(float deltaTime) {
 
     // Ajoute les nouveaux projectiles avec leur vue
     for (auto& proj : nouveauxProjectiles) {
+        // Joue le son au moment de l'apparition
+        m_soundManager.playProjectileSound(proj->getType(), proj->getNiveau());
+
         auto vue = std::make_unique<ProjectileView>(*proj);
         m_listeProjectiles.push_back({std::move(proj), std::move(vue)});
     }

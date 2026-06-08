@@ -31,19 +31,34 @@ void SoundManager::playButtonSound(const string& buttonName) {
     else if (buttonName == "VOLUMEPLUS" || buttonName == "VOLUMEMOINS") file = "assets/sounds/son_bouton.wav";
     else return;
 
-    if (!buffer.loadFromFile(file)) {
-        cout << "Erreur de chargement du son : " << file << endl;
+    if (!m_buttonBuffer.loadFromFile(file)) {
+        cout << "Erreur son bouton : " << file << endl;
         return;
     }
-    sound.emplace(buffer);
-    sound->setVolume(currentVolume);  // applique le volume courant
-    sound->play();
+    m_buttonSound.emplace(m_buttonBuffer);
+    m_buttonSound->setVolume(currentVolume);
+    m_buttonSound->play();
 }
 
+void SoundManager::playProjectileSound(const std::string& type, int niveau) {
+    std::string file = "";
+    if (type == "Feu")   file = "assets/sounds/tir_feu.wav";
+    else if (type == "Glace") file = "assets/sounds/tir_glace.wav";
+
+    if (file.empty()) return;
+
+    if (!m_projectileBuffer.loadFromFile(file)) {
+        std::cout << "Erreur son projectile : " << file << std::endl;
+        return;
+    }
+    m_projectileSound.emplace(m_projectileBuffer);
+    m_projectileSound->setVolume(currentVolume);
+    m_projectileSound->play();
+}
 
 void SoundManager::setVolume(int volume) {
-    currentVolume = volume * 10;  // on sauvegarde
+    currentVolume = volume * 10;
     music.setVolume(currentVolume);
-    if (sound.has_value())
-        sound->setVolume(currentVolume);
+    if (m_buttonSound.has_value())     m_buttonSound->setVolume(currentVolume);
+    if (m_projectileSound.has_value()) m_projectileSound->setVolume(currentVolume);
 }
