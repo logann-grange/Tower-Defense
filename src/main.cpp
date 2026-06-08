@@ -31,7 +31,7 @@ int main() {
     std::cout << "4 - SoundManager..." << std::endl;
     SoundManager snd;
     std::cout << "5 - Store..." << std::endl;
-    Store store(1000);
+    Store store(100);
     std::cout << "6 - ControlManager..." << std::endl;
     ControlManager ctrl(menu.buttonList);
 
@@ -47,7 +47,7 @@ int main() {
     }
 
     std::cout << "9 - GameManager..." << std::endl;
-    GameManager gameManager(mon_niveau);
+    GameManager gameManager(mon_niveau, snd);
     if (!gameManager.initialiser("./data/Vague.json")) {
         return -1;
     }

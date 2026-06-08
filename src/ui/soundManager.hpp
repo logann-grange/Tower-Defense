@@ -8,10 +8,13 @@ using namespace std;
 
 class SoundManager {
     public:
-        sf::SoundBuffer buffer;
-        std::optional<sf::Sound> sound;
+        sf::SoundBuffer m_buttonBuffer;
+        std::optional<sf::Sound> m_buttonSound;
+
+        sf::SoundBuffer m_projectileBuffer;
+        std::optional<sf::Sound> m_projectileSound;
         sf::Music music;
-        float currentVolume = 100.f;  // volume courant
+        float currentVolume = 100.f;
 
         SoundManager();
 
@@ -19,4 +22,5 @@ class SoundManager {
         void stopMusic();
         void playButtonSound(const string& buttonName);
         void setVolume(int volume);
+        void playProjectileSound(const std::string& type, int niveau);
 };
