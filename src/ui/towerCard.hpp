@@ -19,6 +19,8 @@ class TowerCard {
         Texture typeTexture;
         optional<Sprite> typeSprite;
         Vector2f coord;
+        Texture goldTexture;
+        optional<Sprite> goldSprite;
         unique_ptr<Text> label;   
         unique_ptr<Text> price;
         unique_ptr<Font> font;

@@ -43,10 +43,15 @@ TowerCard::TowerCard(const Tour& tower, const std::string& texturePath, Vector2f
     // chargement du prix
     price = make_unique<Text>(*font, to_string(tower.getValeur()), 12);
     price->setFillColor(sf::Color(0, 0, 0));
-    price->setPosition({coord.x+80, coord.y+185});
+    price->setPosition({coord.x+85, coord.y+188});
 
-    cout << "bgSprite valide : " << bgSprite.has_value() << endl;
-    cout << "typeSprite valide : " << typeSprite.has_value() << endl;
+    //chagement de l'icone d'or
+    if (!goldTexture.loadFromFile("assets/UI/icone bouton/gold.png")) {
+        cout << "ERREUR: texture de l'icone gold introuvable !" << std::endl;
+    }
+    goldSprite.emplace(goldTexture);
+    goldSprite->setPosition({coord.x+50, coord.y+178});
+    goldSprite->setScale({30.f/goldTexture.getSize().x, 30.f/goldTexture.getSize().y});
 
 }
 
@@ -56,6 +61,7 @@ void TowerCard::display(RenderWindow &window) {
     if (label) window.draw(*label);
     if (price) window.draw(*price);
     if (towerSprite) window.draw(*towerSprite);
+    if (goldSprite) window.draw(*goldSprite);
 }
 
 bool TowerCard::isClicked(sf::RenderWindow& window) {
