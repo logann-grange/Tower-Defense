@@ -2,35 +2,33 @@
 
 TowerCard::TowerCard(const Tour& tower, const std::string& texturePath, Vector2f coord)
 {
-    this->tower = tower;
-
-    // charger une texture persistante pour la carte de tour
-    if (!towerTexture.loadFromFile(texturePath)) {
-        cout << "ERREUR: texture de tour introuvable ! " << texturePath << std::endl;
-    }
-    towerSprite.emplace(towerTexture);
-    towerSprite->setTexture(towerTexture, true);
-    towerSprite->setPosition({coord.x + 50.f, coord.y + 65.f});
-    towerSprite->setScale({100.f/bgTexture.getSize().x, 125.f/bgTexture.getSize().y});
-
-
-    cout << "TowerCard créée pour : " << tower.getType() << endl;
-    cout << "Sprite valide : " << (towerTexture.getSize().x != 0) << endl;
     // chargement des texture du background
     if (!bgTexture.loadFromFile("assets/UI/TowerCard.png")) {
         cout << "ERREUR: texture du fond du store introuvable !" << std::endl;
     }
     bgSprite.emplace(bgTexture);
     bgSprite->setPosition(coord);
-    bgSprite->setScale({100.f/bgTexture.getSize().x, 125.f/bgTexture.getSize().y});
+    bgSprite->setScale({180.f/bgTexture.getSize().x, 230.f/bgTexture.getSize().y});
+
+    this->tower = tower;
+
+    // chargement de la tour
+    if (!towerTexture.loadFromFile(texturePath)) {
+        cout << "ERREUR: texture de tour introuvable ! " << texturePath << std::endl;
+    }
+    towerSprite.emplace(towerTexture);
+    towerSprite->setTexture(towerTexture, true);
+    towerSprite->setPosition({coord.x + 5.f, coord.y + 5.f});
+    towerSprite->setScale({180.f/towerTexture.getSize().x, 230.f/towerTexture.getSize().y});
+
 
     //chargement des texture de l'indicateur de type
     if (!typeTexture.loadFromFile("assets/UI/icone tour/" + tower.getType() + ".png")) {
         cout << "ERREUR: texture du l'élément introuvable !" << std::endl;
     }
     typeSprite.emplace(typeTexture);
-    typeSprite->setPosition({coord.x+4, coord.y+15});
-    typeSprite->setScale({20.f/typeTexture.getSize().x, 20.f/typeTexture.getSize().y});
+    typeSprite->setPosition({coord.x+4, coord.y+30});
+    typeSprite->setScale({40.f/typeTexture.getSize().x, 40.f/typeTexture.getSize().y});
 
     //chargement de la police
     font = make_unique<Font>();
@@ -39,10 +37,13 @@ TowerCard::TowerCard(const Tour& tower, const std::string& texturePath, Vector2f
     }
 
     // chargement du label
-    label = make_unique<Text>(*font, "Tour de " + tower.getType(), 6);
+    label = make_unique<Text>(*font, "Tour de " + tower.getType(), 10);
     label->setFillColor(sf::Color(0, 0, 0));
-    label->setPosition({coord.x+20, coord.y+15});
-    // a enlever ??
+    label->setPosition({coord.x+35, coord.y+30});
+    // chargement du prix
+    price = make_unique<Text>(*font, to_string(tower.getValeur()), 12);
+    price->setFillColor(sf::Color(0, 0, 0));
+    price->setPosition({coord.x+80, coord.y+185});
 
     cout << "bgSprite valide : " << bgSprite.has_value() << endl;
     cout << "typeSprite valide : " << typeSprite.has_value() << endl;
@@ -53,6 +54,7 @@ void TowerCard::display(RenderWindow &window) {
     if (bgSprite) window.draw(*bgSprite);
     if (typeSprite) window.draw(*typeSprite);
     if (label) window.draw(*label);
+    if (price) window.draw(*price);
     if (towerSprite) window.draw(*towerSprite);
 }
 
