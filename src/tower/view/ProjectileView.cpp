@@ -44,6 +44,7 @@ float ProjectileView::choisirEchelle(const std::string& type, int niveau) {
 void ProjectileView::update(const Projectile& logique) {
     m_sprite.setPosition(logique.getPosition());
     m_sprite.setRotation(sf::degrees(logique.getAngle()));
+    
 }
 
 void ProjectileView::draw(sf::RenderWindow& window) const {
