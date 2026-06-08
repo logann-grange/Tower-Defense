@@ -194,10 +194,12 @@ int main() {
 
         if (state == GameState::GameOver) {
             window.setView(vueMenu);
+            state = GameState::Menu;
         }
 
         if (state == GameState::Victory) {
             window.setView(vueMenu);
+            state = GameState::Menu;
         }
 
         window.display();
