@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include <list>
 #include <memory>
 #include "../gestionVague/GestionVague.hpp"
 #include "../gestionVague/MonstreInstance.hpp"
@@ -59,7 +60,7 @@ private:
     Map&                         m_map;
     std::vector<sf::Vector2i>    m_chemin;
     std::vector<MonstreInstance> m_listeMonstres;
-    std::vector<TourInstance>    m_listeTours;
+    std::list<TourInstance>    m_listeTours;
     
     GestionVague m_gestionVague;
     Castle       m_castle;
